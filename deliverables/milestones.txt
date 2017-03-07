@@ -1,0 +1,40 @@
+Jeff Klouda
+Matthew D'Alonzo, Gabe King, Calvin Walker
+CSE20312 Final Project
+
+Initial milestones for lab 6 (40pts)
+    - Work through SDL tutorials to get sprites on the screen with user control
+      (15 pts)
+    - Develop a prototype for the python script that can take in music files and
+      output some sort of text files (15pts)
+    - Develop data structure for storing music from input text files (5pts)
+    - Develop basic AI behavior (5pts)
+
+Overall Development Milestones:
+
+C++ Code
+    Graphics
+        - Display sprites to window properly using SDL
+        - Vary level appearance (possibly randomly)
+
+    Control
+        - Capture input from user using SDL
+        - Refine controls for smooth gameplay
+        - Possibly investigate alternate control schemes (gamepads, touch)
+
+    Gameplay
+        - Develop AI Behavior
+        - Translate text files into level layouts 
+        - Have game objects interact properly (collisions and the like)
+        - Develop gameplay variations (alternative powerups, enemy variation, 
+          level variation, etc.)
+
+Python Script
+    Signal Procesing
+        - Translate music file to representative text file to be read by C++
+          program
+
+Other
+    - Develop artwork 
+    - Study ABC notation or alternative methods of representing music as text
+    - Possibly investigate alternate platforms for development (web, mobile)
