@@ -7,7 +7,7 @@ Initial milestones for lab 6 (40pts)
     - Work through SDL tutorials to get sprites on the screen with user control
       (15 pts) *Jeff and Gabe*
     - Develop a prototype for the python script that can take in music files and
-      output some sort of text files (15pts) 
+      output some sort of text files (15pts) *Matthew D'Alonzo*
     - Develop data structure for storing music from input text files (5pts)
     - Develop basic AI behavior (5pts)
 
