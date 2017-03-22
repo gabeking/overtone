@@ -213,23 +213,17 @@ for i in notes:
 	elif i <= 1864.66:
 		graphedNotes.append(1864.66)
 	else:
-		graphedNotes.append(1.000)
+		graphedNotes.append(i)
 
 rectifiedNotes = []
-
+prevNote=0
 for i in graphedNotes:
-	if i > 0 and i <=110:
-		rectifiedNotes.append(i*4)
-	elif i > 110 and i < 220:
-		rectifiedNotes.append(i*2)
-	elif i < 880 and i <= 1320:
+	if i < 1000:
+		prevNote=i
 		rectifiedNotes.append(i)
-	elif i > 1320 and i <=1740:
-		rectifiedNotes.append(i/2)
-	elif i>1740:
-		rectifiedNotes.append(i/5)
 	else:
-		rectifiedNotes.append(i)
+		rectifiedNotes.append(1.0)
+
 
 smoothedNotes = []
 smoothingVal = 4
@@ -246,7 +240,7 @@ for index, j in enumerate(lines):
 	else:
 		times.append(0)
 
-for i, tone in enumerate(notes):
+for i, tone in enumerate(rectifiedNotes):
 	print tone
 	play_tone(tone, 0.5, times[i], fs, stream)
 
