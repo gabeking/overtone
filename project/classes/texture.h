@@ -16,7 +16,7 @@ class texture {
         texture(SDL_Renderer*);
         ~texture();
         bool loadFromFile(std::string);                  // load image at path
-        void free();                                // deallocate texture
+        void freeTexture();                              // deallocate texture
         void render (int, int, SDL_Rect* = NULL);   // render cliiped image at x, y
         
         // get image dimensions

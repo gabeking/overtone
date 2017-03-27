@@ -19,11 +19,11 @@ texture::texture(SDL_Renderer* gRenderer) {
 }
 
 texture::~texture() {
-    free();
+    freeTexture();
 }
 
-bool loadFromFile (std::string path) {
-    free();
+bool texture::loadFromFile (std::string path) {
+    freeTexture();
     SDL_Texture* newTexture = NULL;
     SDL_Surface* lSurface = IMG_Load(path.c_str()); // loaded surface
     if (lSurface == NULL) {
@@ -53,17 +53,17 @@ bool loadFromFile (std::string path) {
     return mTexture != NULL;
 }
 
-void texture::free() {
+void texture::freeTexture() {
     //Free texture
     if (mTexture != NULL) {
-        SDL_DestoryTexture(mTexture);
+        SDL_DestroyTexture(mTexture);
         mTexture = NULL;
         mWidth = 0;
         mHeight = 0;
     }
 }
 
-void texture::render (SDL_Renderer gRenderer, int x, int y, SDL_Rect* clip) {
+void texture::render (int x, int y, SDL_Rect* clip) {
     // Set rendering space
     SDL_Rect renderQuad = {x, y, mWidth, mHeight};
 
