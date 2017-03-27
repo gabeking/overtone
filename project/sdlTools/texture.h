@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 
 class texture {
@@ -19,6 +20,12 @@ class texture {
         void freeTexture();                              // deallocate texture
         void render (int, int, SDL_Rect* = NULL);   // render cliiped image at x, y
         
+        // create image from font string
+        bool loadFromRenderedText (TTF_Font*, std::string text, SDL_Color textColor);
+        
+        // set color modultation
+        void setColor (Uint8 red, Uint8 green, Uint8 blue);
+
         // get image dimensions
         int getWidth();
         int getHeight();

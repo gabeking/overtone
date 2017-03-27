@@ -6,6 +6,7 @@
 #include "texture.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
 
@@ -75,6 +76,40 @@ void texture::render (int x, int y, SDL_Rect* clip) {
 
     // render to screen
     SDL_RenderCopy(gRenderer, mTexture, clip, &renderQuad);
+}
+
+bool texture::loadFromRenderedText (TTF_Font* font, std::string text, SDL_Color textColor) {
+    freeTexture(); // get rid of preexisting texture
+
+    // render text surface
+    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
+    if (textSurface == NULL) {
+        printf ("Unable to render text surface. SDL_ttf Error: %s\n", TTF_GetError());
+    }
+    else {
+        // Create texture from surface pixels
+        mTexture = SDL_CreateTextureFromSurface(gRenderer, textSurface);
+        if (mTexture == NULL) {
+            printf("Unable to create texture from rendered text. SDL Error: %s\n", 
+                SDL_GetError());
+        }
+        else {
+            // get image dimensions 
+            mWidth = textSurface->w;
+            mHeight = textSurface->h;
+        }
+
+        // get rid of surface
+        SDL_FreeSurface(textSurface);
+    }
+
+    // return success
+    return (mTexture != NULL);
+}
+
+void texture::setColor (Uint8 red, Uint8 green, Uint8 blue) {
+    // Modulate texture rgb
+    SDL_SetTextureColorMod(mTexture, red, green, blue);
 }
 
 int texture::getWidth() {
