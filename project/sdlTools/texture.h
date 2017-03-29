@@ -3,6 +3,12 @@
  * Jeff Klouda
  */
 
+/* TODO?  Make into more general "sprite" class that can contain more info such as:
+    position
+    velocity
+    sprite clips array
+ */
+
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
