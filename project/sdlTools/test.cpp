@@ -58,6 +58,13 @@ bool loadMedia()
         gSpriteClips[ 3 ].w = 100;
         gSpriteClips[ 3 ].h = 100;
     }
+    
+    // Load second test object
+    if( !gSpriteSheetTextures[1].loadFromFile( "./dot_test.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
 
     return success;
 }
@@ -73,6 +80,7 @@ int main( int argc, char* args[] )
     {   
         texture texture0(gRenderer);
 
+        gSpriteSheetTextures.push_back(texture0);
         gSpriteSheetTextures.push_back(texture0);
 
         //Load media
@@ -104,6 +112,9 @@ int main( int argc, char* args[] )
                 //Clear screen
                 SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
                 SDL_RenderClear( gRenderer );
+
+                // Render dot_test sprite
+                gSpriteSheetTextures[1].render( SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
 
                 //Render top left sprite
                 gSpriteSheetTextures[0].render( 0, 0, &gSpriteClips[ 0 ] );
