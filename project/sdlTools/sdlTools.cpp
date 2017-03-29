@@ -59,7 +59,7 @@ bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int s
 
 void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>& textures) {
     
-    // Free loaded images
+    // Free loaded images passed as vector
     for (std::vector<texture>::iterator it = textures.begin(); it != textures.end(); it++) {
         it->freeTexture();
     }
