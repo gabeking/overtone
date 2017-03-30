@@ -3,6 +3,8 @@
  * Jeff Klouda - based on code from Lazy Foo' Productions (http://lazyfoo.net/)
  */
 
+// TODO Adapt loadMedia() function from test.cpp (maybe store sprites in a vector?
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include "sdlTools.h"
@@ -34,8 +36,10 @@ bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int s
             success = false;
         }
         else {
-            // Initialize renderer for window
-            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+            // Initialize renderer for window with vsync enabled
+            gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | 
+                SDL_RENDERER_PRESENTVSYNC);
+            
             if (gRenderer == NULL) {
                 printf("Renderer could not be created. SDL Error: %s\n", SDL_GetError());
                 success = false;
@@ -59,7 +63,7 @@ bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int s
 
 void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>& textures) {
     
-    // Free loaded images
+    // Free loaded images passed as vector
     for (std::vector<texture>::iterator it = textures.begin(); it != textures.end(); it++) {
         it->freeTexture();
     }

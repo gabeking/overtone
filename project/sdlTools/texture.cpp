@@ -31,7 +31,7 @@ bool texture::loadFromFile (std::string path) {
         printf ("Unable to load image %s: SDL_image Error: %s\n", path.c_str(), IMG_GetError());
     }
     else {
-        // Color key image
+        // Color key image - SETS RGB 0, 255, 255 to be invisible
         SDL_SetColorKey (lSurface, SDL_TRUE, SDL_MapRGB(lSurface->format, 0, 0xFF, 0xFF));
         // Create texture from surface pixels
         newTexture = SDL_CreateTextureFromSurface(gRenderer, lSurface);
@@ -108,8 +108,21 @@ bool texture::loadFromRenderedText (TTF_Font* font, std::string text, SDL_Color 
 }
 
 void texture::setColor (Uint8 red, Uint8 green, Uint8 blue) {
-    // Modulate texture rgb
+    // Modulate texture rgb (Change colors)
     SDL_SetTextureColorMod(mTexture, red, green, blue);
+}
+
+// Set blend mode 
+// Set to SDL_BLENDMODE_BLEND for standard alpha blending
+void texture::setBlendMode(SDL_BlendMode blendmode) {
+    SDL_SetTextureBlendMode(mTexture, blendmode);
+}
+
+// Set alpha modulation (transparency)
+// **REQUIRES blending to be enables, ie. blend mode to be set to SDL_BLENDMODE_BLEND
+// alpha = 255 opaque, alpha = 0 invisible
+void texture::setAlpha(Uint8 alpha) {
+    SDL_SetTextureAlphaMod(mTexture, alpha);
 }
 
 int texture::getWidth() {

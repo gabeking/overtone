@@ -3,6 +3,12 @@
  * Jeff Klouda
  */
 
+/* TODO?  Make into more general "sprite" class that can contain more info such as:
+    position
+    velocity
+    sprite clips array
+ */
+
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
@@ -25,6 +31,13 @@ class texture {
         
         // set color modultation
         void setColor (Uint8 red, Uint8 green, Uint8 blue);
+        
+        // set blend mode (set to SDL_BLENDMODE_BLEND to enable blending)
+        void setBlendMode (SDL_BlendMode);
+
+        // Set alpha modulation (transparency)
+        // alpha = 255 opaque   alpha = 0 transparent
+        void setAlpha(Uint8 alpha);
 
         // get image dimensions
         int getWidth();
