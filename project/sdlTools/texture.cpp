@@ -10,8 +10,10 @@
 #include <stdio.h>
 #include <string>
 
-texture::texture(SDL_Renderer* gRenderer) {
-    this->gRenderer = gRenderer;
+// Global renderer
+extern SDL_Renderer* gRenderer;
+
+texture::texture() {
     mTexture = NULL;    // initalize texture pointer
     
     // initialize image dimensions

@@ -78,7 +78,7 @@ int main( int argc, char* args[] )
     }
     else
     {   
-        texture texture0(gRenderer);
+        texture texture0;
 
         gSpriteSheetTextures.push_back(texture0);
         gSpriteSheetTextures.push_back(texture0);

@@ -3,11 +3,6 @@
  * Jeff Klouda
  */
 
-/* TODO?  Make into more general "sprite" class that can contain more info such as:
-    position
-    velocity
-    sprite clips array
- */
 
 #ifndef TEXTURE_H
 #define TEXTURE_H
@@ -20,7 +15,7 @@
 class texture {
     
     public:
-        texture(SDL_Renderer*);
+        texture();
         ~texture();
         bool loadFromFile(std::string);                  // load image at path
         void freeTexture();                              // deallocate texture
@@ -45,7 +40,6 @@ class texture {
     
     private:
         SDL_Texture* mTexture;      // hardware texture
-        SDL_Renderer* gRenderer;    // window renderer
 
         // image dimensions
         int mWidth;
