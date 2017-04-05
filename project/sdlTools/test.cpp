@@ -13,7 +13,8 @@ using namespace std;
 #include "sdlTools.h"
 #include "note.h"
 
-
+//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
+int DIFFICULTY = 3;
 
 // screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -79,6 +80,8 @@ bool loadMedia()
 int main( int argc, char* args[] )
 {
 	
+	srand (time(NULL));
+	
 	/*
 	* Create .txt files for note class
 	* This python program will output
@@ -97,6 +100,7 @@ int main( int argc, char* args[] )
 	/*
 	 * This will intitialize the note class as a vector of class notes
 	 */
+	vector<note> total_notes;
 	vector<note> song_notes;
 	vector<double> time_vec;
 	vector<double> freq_vec;
@@ -122,11 +126,54 @@ int main( int argc, char* args[] )
     //Pushes the times and frequencies into a vector of note classes.
     for (unsigned int counter = 0; counter < freq_vec.size() && counter < time_vec.size(); ++counter){
 		note new_note(freq_vec[counter], time_vec[counter]);
-		song_notes.push_back(new_note);
+		total_notes.push_back(new_note);
 	}
+	//second and second_increment are used to 
+	//take out a certain amount of notes from the total_notes vector
+	double second;
+	double second_increment;
+	double songLength = total_notes.back().getOnset();
 	
+	//This changes that amount of enemies that will be spawned
+	//based on the difficulty
+	switch (DIFFICULTY) {
+		case 1:
+			second = 3;
+			second_increment = 3;
+			break;
+		case 2:
+			second = 2;
+			second_increment = 2;
+			break;
+		case 3:
+			second = 1;
+			second_increment = 1;
+			break;
+		default:
+			second = 3;
+			second_increment = 3;
+			break;
+	}
 
+	//lower_size and upper_size will keep the range from which
+	//the note will be drawn
+	int lower_size = 0;
+	int upper_size = 0;
+	int note_to_choose = 0;
 	
+	//This for loop takes one note, at random, in every 1, 2, or 3 
+	//second range
+	for (unsigned int counter = 0; counter < total_notes.size(); ++counter){
+		if (total_notes[counter].getOnset() > second){
+			int modulo = upper_size-lower_size;
+			note_to_choose = rand() % modulo + lower_size - 1;
+			song_notes.push_back(total_notes[note_to_choose]);
+			second+=second_increment;
+			lower_size=upper_size;
+		}
+		upper_size++;
+	}
+
     //Start up SDL and create window
     if( !init(gWindow, gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT) )
     {   
