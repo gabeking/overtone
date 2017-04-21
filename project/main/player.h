@@ -10,16 +10,16 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-class player : public sprite { // inherits from sprite class
+class player : protected sprite { // inherits from sprite class
 
     public:
+        player(float,float, texture*);
         virtual void update();
-        void updateAcc();
-        void updateVel();
+        void updateVel(float, float);
     private:
-        float xAcc;
-        float yAcc;
+        float acc;
         float maxVel;
-        float maxAcc;
         float drag;
-}
+};
+
+#endif
