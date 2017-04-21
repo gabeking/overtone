@@ -31,7 +31,9 @@ SDL_Window* gWindow = NULL;
 
 SDL_Renderer* gRenderer = NULL;
 
-SDL_Rect gSpriteClips[4];
+SDL_Rect playerSpriteClips[1];
+SDL_Rect gSpriteClip[4];
+std::vector<SDL_Rect*> gSpriteClips;
 std::vector<texture> gSpriteSheetTextures;
 
 bool loadMedia();   // loads files for sprite textures
@@ -151,7 +153,10 @@ int main( int argc, char* args[] )
         {
             //Initialize player
             player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
-            &gSpriteSheetTextures[1]);
+            &gSpriteSheetTextures[0]);
+            std::cout << "Test Test\n";
+            Player.setClips(gSpriteClips);
+            std::cout << "test test\n";
             //Main loop flag
             bool quit = false;
 
@@ -161,6 +166,8 @@ int main( int argc, char* args[] )
             //While application is running
             while( !quit )
             {
+                /* TODO: Make animation counter */
+                
                 //Handle events on queue
                 while( SDL_PollEvent( &e ) != 0 ) 
                 {
@@ -180,16 +187,16 @@ int main( int argc, char* args[] )
                 Player.render();
 
                 //Render top left sprite
-                gSpriteSheetTextures[0].render( 0, 0, &gSpriteClips[ 0 ] );
+                //gSpriteSheetTextures[0].render( 0, 0, &gSpriteClips[ 0 ] );
 
                 //Render top right sprite
-                gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 1 ].w, 0, &gSpriteClips[ 1 ] );
+                //gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 1 ].w, 0, &gSpriteClips[ 1 ] );
 
                 //Render bottom left sprite
-                gSpriteSheetTextures[0].render( 0, SCREEN_HEIGHT - gSpriteClips[ 2 ].h, &gSpriteClips[ 2 ] );
+                //gSpriteSheetTextures[0].render( 0, SCREEN_HEIGHT - gSpriteClips[ 2 ].h, &gSpriteClips[ 2 ] );
 
                 //Render bottom right sprite
-                gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 3 ].w, SCREEN_HEIGHT - gSpriteClips[ 3 ].h, &gSpriteClips[ 3 ] );
+                //gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 3 ].w, SCREEN_HEIGHT - gSpriteClips[ 3 ].h, &gSpriteClips[ 3 ] );
 
                 //Update screen
                 SDL_RenderPresent( gRenderer );
@@ -216,28 +223,32 @@ bool loadMedia()
     else
     {
         //Set top left sprite
-        gSpriteClips[ 0 ].x =   0;
-        gSpriteClips[ 0 ].y =   0;
-        gSpriteClips[ 0 ].w = 100;
-        gSpriteClips[ 0 ].h = 100;
+        gSpriteClip[0].x =   0;
+        gSpriteClip[0].y =   0;
+        gSpriteClip[0].w = 100;
+        gSpriteClip[0].h = 100;
+        gSpriteClips.push_back(&gSpriteClip[0]);
 
         //Set top right sprite
-        gSpriteClips[ 1 ].x = 100;
-        gSpriteClips[ 1 ].y =   0;
-        gSpriteClips[ 1 ].w = 100;
-        gSpriteClips[ 1 ].h = 100;
+        gSpriteClip[1].x = 100;
+        gSpriteClip[1].y =   0;
+        gSpriteClip[1].w = 100;
+        gSpriteClip[1].h = 100;
+        gSpriteClips.push_back(&gSpriteClip[1]);
  
         //Set bottom left sprite
-        gSpriteClips[ 2 ].x =   0;
-        gSpriteClips[ 2 ].y = 100;
-        gSpriteClips[ 2 ].w = 100;
-        gSpriteClips[ 2 ].h = 100;
+        gSpriteClip[2].x =   0;
+        gSpriteClip[2].y = 100;
+        gSpriteClip[2].w = 100;
+        gSpriteClip[2].h = 100;
+        gSpriteClips.push_back(&gSpriteClip[2]);
 
         //Set bottom right sprite
-        gSpriteClips[ 3 ].x = 100;
-        gSpriteClips[ 3 ].y = 100;
-        gSpriteClips[ 3 ].w = 100;
-        gSpriteClips[ 3 ].h = 100;
+        gSpriteClip[3].x = 100;
+        gSpriteClip[3].y = 100;
+        gSpriteClip[3].w = 100;
+        gSpriteClip[3].h = 100;
+        gSpriteClips.push_back(&gSpriteClip[3]);
     }
     
     // Load second test object

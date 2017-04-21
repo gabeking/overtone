@@ -121,7 +121,7 @@ void texture::setBlendMode(SDL_BlendMode blendmode) {
 }
 
 // Set alpha modulation (transparency)
-// **REQUIRES blending to be enables, ie. blend mode to be set to SDL_BLENDMODE_BLEND
+// **REQUIRES blending to be enabled, ie. blend mode to be set to SDL_BLENDMODE_BLEND
 // alpha = 255 opaque, alpha = 0 invisible
 void texture::setAlpha(Uint8 alpha) {
     SDL_SetTextureAlphaMod(mTexture, alpha);

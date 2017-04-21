@@ -5,6 +5,7 @@
 
 #include "texture.h"
 #include "sprite.h"
+#include <iostream>
 #include <vector>
 #include <SDL2/SDL.h>
 #include <cmath>
@@ -29,19 +30,20 @@ void sprite::render() {
     spriteTexture->render((int) x, (int) y, currentClip);
 }
 
-void sprite::nextClip(int nextClip = -1) {
+void sprite::nextClip(int nextClip) { // nextClip defaults to -1
     // no clips
     if (currentClip ==  NULL) {    // no clips
         return;
     }
     
-    // reset clipNo if beyond end of clips vector
-    if (clipNo >= (int) clips.size()) { 
-        clipNo = -1;
-    }
     // automatically select next clip in vector if nextClip is default
     if (nextClip < 0) {       
-        currentClip = clips[++clipNo];
+        clipNo++;
+        // reset clipNo if beyond end of clips vector
+        if (clipNo >= (int) clips.size()) { 
+            clipNo = 0;
+        }
+        currentClip = clips[clipNo]; 
     }
     
     // go to nextClip if nextClip is passed
@@ -54,7 +56,8 @@ void sprite::nextClip(int nextClip = -1) {
 }
 
 void sprite::setClips(std::vector<SDL_Rect*> clips) {
-    currentClip = clips[0];
+    this->clips = clips;
+    currentClip = this->clips[0];
 }
 
 void sprite::updatePos() {

@@ -34,6 +34,7 @@ void player::update() {
     if (keystates[SDL_SCANCODE_RIGHT]) {
         dx += acc;
     }
+    nextClip();
     updateVel(dx, dy);
     updatePos();
 }

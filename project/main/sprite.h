@@ -16,7 +16,7 @@ class sprite {
         ~sprite();
         virtual void update() = 0;
         void render();                      // render sprite
-        void nextClip(int);                 // move to next clipping rectangle
+        void nextClip(int=-1);              // move to next clipping rectangle
         void setClips(std::vector<SDL_Rect*>);   // set clipping rectangles
         void updatePos();                   // update position based on velocity
         void updateVel(float, float);       // update velocity based on current velocity
