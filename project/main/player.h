@@ -10,7 +10,7 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-class player : protected sprite { // inherits from sprite class
+class player : public sprite { // inherits from sprite class
 
     public:
         player(float,float, texture*);

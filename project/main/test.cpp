@@ -12,6 +12,8 @@ using namespace std;
 #include "texture.h"
 #include "sdlTools.h"
 #include "note.h"
+#include "sprite.h"
+#include "player.h"
 
 //Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
 int DIFFICULTY = 3;
@@ -193,6 +195,9 @@ int main( int argc, char* args[] )
         }
         else
         {
+            //Initialize player
+            player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
+            &gSpriteSheetTextures[1]);
             //Main loop flag
             bool quit = false;
 
@@ -216,8 +221,9 @@ int main( int argc, char* args[] )
                 SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
                 SDL_RenderClear( gRenderer );
 
-                // Render dot_test sprite
-                gSpriteSheetTextures[1].render( SCREEN_WIDTH/2, SCREEN_HEIGHT/2);
+                // Handle player sprite
+                Player.update();
+                Player.render();
 
                 //Render top left sprite
                 gSpriteSheetTextures[0].render( 0, 0, &gSpriteClips[ 0 ] );
