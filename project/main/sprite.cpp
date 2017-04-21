@@ -20,7 +20,7 @@ sprite::sprite(texture* spriteTexture) {
     xVel = 0;
     yVel = 0;
     currentClip = NULL;
-    clip_no = 0;            //current clip's position in clip vector
+    clipNo = 0;            //current clip's position in clip vector
 }
 
 sprite::~sprite() {}
@@ -30,16 +30,31 @@ void sprite::render() {
 }
 
 void sprite::nextClip(int nextClip = -1) {
-    if (current_clip ==  NULL) {    // no clips
+    // no clips
+    if (currentClip ==  NULL) {    // no clips
         return;
     }
-    if (nextClip < 0) {         // automatically select next clip in vector
     
+    // reset clipNo if beyond end of clips vector
+    if (clipNo >= (int) clips.size()) { 
+        clipNo = -1;
+    }
+    // automatically select next clip in vector if nextClip is default
+    if (nextClip < 0) {       
+        currentClip = clips[++clipNo];
+    }
+    
+    // go to nextClip if nextClip is passed
+    else {                   
+        if (nextClip <= (int) clips.size()) {
+            currentClip = clips[nextClip];
+            clipNo = nextClip;
+        }
     }
 }
 
 void sprite::setClips(std::vector<SDL_Rect*> clips) {
-    current_clip = clips[0];
+    currentClip = clips[0];
 }
 
 void sprite::updatePos() {

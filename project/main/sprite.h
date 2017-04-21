@@ -34,6 +34,7 @@ class sprite {
         float yVel;                         // y velocity
         int width;
         int height;
+        int clipNo;                        // currentClip's position in clips
 };
 
 #endif
