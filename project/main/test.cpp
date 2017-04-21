@@ -31,59 +31,14 @@ SDL_Renderer* gRenderer = NULL;
 SDL_Rect gSpriteClips[4];
 std::vector<texture> gSpriteSheetTextures;
 
-bool loadMedia()
-	{
-    //Loading success flag
-    bool success = true;
+bool loadMedia();   // loads files for sprite textures
 
-    //Load sprite sheet texture
-    if( !gSpriteSheetTextures[0].loadFromFile( "./dots.png" ) )
-    {
-        printf( "Failed to load sprite sheet texture!\n" );
-        success = false;
-    }
-    else
-    {
-        //Set top left sprite
-        gSpriteClips[ 0 ].x =   0;
-        gSpriteClips[ 0 ].y =   0;
-        gSpriteClips[ 0 ].w = 100;
-        gSpriteClips[ 0 ].h = 100;
-
-        //Set top right sprite
-        gSpriteClips[ 1 ].x = 100;
-        gSpriteClips[ 1 ].y =   0;
-        gSpriteClips[ 1 ].w = 100;
-        gSpriteClips[ 1 ].h = 100;
- 
-        //Set bottom left sprite
-        gSpriteClips[ 2 ].x =   0;
-        gSpriteClips[ 2 ].y = 100;
-        gSpriteClips[ 2 ].w = 100;
-        gSpriteClips[ 2 ].h = 100;
-
-        //Set bottom right sprite
-        gSpriteClips[ 3 ].x = 100;
-        gSpriteClips[ 3 ].y = 100;
-        gSpriteClips[ 3 ].w = 100;
-        gSpriteClips[ 3 ].h = 100;
-    }
-    
-    // Load second test object
-    if( !gSpriteSheetTextures[1].loadFromFile( "./dot_test.png" ) )
-    {
-        printf( "Failed to load sprite sheet texture!\n" );
-        success = false;
-    }
-
-    return success;
-}
 
 int main( int argc, char* args[] )
 {
 	
 	srand (time(NULL));
-	
+
 	/*
 	* Create .txt files for note class
 	* This python program will output
@@ -92,89 +47,89 @@ int main( int argc, char* args[] )
 	*/
 	string SONGNAME = "allstar.mp3";	//Name of song that user wishes to use
 	/* TODO: ALLOW USER TO CHOOSE SONG */
-	string chmod_var = "chmod +x ../songfiles/notetimefiles.py";	
-	string process_var = "python ../songfiles/notetimefiles.py ../songfiles/" + SONGNAME;	
+//	string chmod_var = "chmod +x ../songfiles/notetimefiles.py";	
+//	string process_var = "python ../songfiles/notetimefiles.py ../songfiles/" + SONGNAME;	
 
-	system(chmod_var.c_str());	//Gives program permission to run python file
-	system(process_var.c_str());	//Processes python file
+//	system(chmod_var.c_str());	//Gives program permission to run python file
+//	system(process_var.c_str());	//Processes python file
 	
 	
 	/*
 	 * This will intitialize the note class as a vector of class notes
 	 */
-	vector<note> total_notes;
-	vector<note> song_notes;
-	vector<double> time_vec;
-	vector<double> freq_vec;
-	string input_string; 
+//	vector<note> total_notes;
+//	vector<note> song_notes;
+//	vector<double> time_vec;
+//	vector<double> freq_vec;
+//	string input_string; 
 	
 	//Takes the numbers from the times.txt and 
 	//inputs them into a vector
-	ifstream timefile("../songfiles/times.txt");
-    while (std::getline(timefile, input_string))
-    {
-        time_vec.push_back(stod(input_string));
-    }
+//	ifstream timefile("../songfiles/times.txt");
+//    while (std::getline(timefile, input_string))
+//    {
+//        time_vec.push_back(stod(input_string));
+//    }
     
     //Takes the numbers from the notes.txt and
     //inputs them into a vector
-    ifstream freqfile("../songfiles/notes.txt"); 
-    while (std::getline(freqfile, input_string))
-    {
-        freq_vec.push_back(stod(input_string));
+//    ifstream freqfile("../songfiles/notes.txt"); 
+//    while (std::getline(freqfile, input_string))
+//    {
+//        freq_vec.push_back(stod(input_string));
 
-    }
+//    }
     
     //Pushes the times and frequencies into a vector of note classes.
-    for (unsigned int counter = 0; counter < freq_vec.size() && counter < time_vec.size(); ++counter){
-		note new_note(freq_vec[counter], time_vec[counter]);
-		total_notes.push_back(new_note);
-	}
+//    for (unsigned int counter = 0; counter < freq_vec.size() && counter < time_vec.size(); ++counter){
+//		note new_note(freq_vec[counter], time_vec[counter]);
+//		total_notes.push_back(new_note);
+//	}
 	//second and second_increment are used to 
 	//take out a certain amount of notes from the total_notes vector
-	double second;
-	double second_increment;
-	double songLength = total_notes.back().getOnset();
+//	double second;
+//	double second_increment;
+//	double songLength = total_notes.back().getOnset();
 	
 	//This changes that amount of enemies that will be spawned
 	//based on the difficulty
-	switch (DIFFICULTY) {
-		case 1:
-			second = 3;
-			second_increment = 3;
-			break;
-		case 2:
-			second = 2;
-			second_increment = 2;
-			break;
-		case 3:
-			second = 1;
-			second_increment = 1;
-			break;
-		default:
-			second = 3;
-			second_increment = 3;
-			break;
-	}
+//	switch (DIFFICULTY) {
+//		case 1:
+//			second = 3;
+//			second_increment = 3;
+//			break;
+//		case 2:
+//			second = 2;
+//			second_increment = 2;
+//			break;
+//		case 3:
+//			second = 1;
+//			second_increment = 1;
+//			break;
+//		default:
+//			second = 3;
+//			second_increment = 3;
+//			break;
+//	}
 
 	//lower_size and upper_size will keep the range from which
 	//the note will be drawn
-	int lower_size = 0;
-	int upper_size = 0;
-	int note_to_choose = 0;
+//	int lower_size = 0;
+//	int upper_size = 0;
+//	int note_to_choose = 0;
 	
 	//This for loop takes one note, at random, in every 1, 2, or 3 
 	//second range
-	for (unsigned int counter = 0; counter < total_notes.size(); ++counter){
-		if (total_notes[counter].getOnset() > second){
-			int modulo = upper_size-lower_size;
-			note_to_choose = rand() % modulo + lower_size - 1;
-			song_notes.push_back(total_notes[note_to_choose]);
-			second+=second_increment;
-			lower_size=upper_size;
-		}
-		upper_size++;
-	}
+//	for (unsigned int counter = 0; counter < total_notes.size(); ++counter){
+//		if (total_notes[counter].getOnset() > second){
+//			int modulo = upper_size-lower_size;
+//			note_to_choose = rand() % modulo + lower_size - 1;
+//			song_notes.push_back(total_notes[note_to_choose]);
+//			second+=second_increment;
+//			lower_size=upper_size;
+//		}
+//		upper_size++;
+//	}
 
     //Start up SDL and create window
     if( !init(gWindow, gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT) )
@@ -246,4 +201,52 @@ int main( int argc, char* args[] )
 	// Free resources and close SDL
     close(gWindow, gRenderer, gSpriteSheetTextures);
     return 0;
+}
+
+bool loadMedia()
+	{
+    //Loading success flag
+    bool success = true;
+
+    //Load sprite sheet texture
+    if( !gSpriteSheetTextures[0].loadFromFile( "./dots.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
+    else
+    {
+        //Set top left sprite
+        gSpriteClips[ 0 ].x =   0;
+        gSpriteClips[ 0 ].y =   0;
+        gSpriteClips[ 0 ].w = 100;
+        gSpriteClips[ 0 ].h = 100;
+
+        //Set top right sprite
+        gSpriteClips[ 1 ].x = 100;
+        gSpriteClips[ 1 ].y =   0;
+        gSpriteClips[ 1 ].w = 100;
+        gSpriteClips[ 1 ].h = 100;
+ 
+        //Set bottom left sprite
+        gSpriteClips[ 2 ].x =   0;
+        gSpriteClips[ 2 ].y = 100;
+        gSpriteClips[ 2 ].w = 100;
+        gSpriteClips[ 2 ].h = 100;
+
+        //Set bottom right sprite
+        gSpriteClips[ 3 ].x = 100;
+        gSpriteClips[ 3 ].y = 100;
+        gSpriteClips[ 3 ].w = 100;
+        gSpriteClips[ 3 ].h = 100;
+    }
+    
+    // Load second test object
+    if( !gSpriteSheetTextures[1].loadFromFile( "./dot_test.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
+
+    return success;
 }

@@ -14,9 +14,9 @@
 player::player (float x, float y, texture* text) : sprite (text) {
     setVel(0,0);
     setPos(x,y);
-    maxVel = 10;
-    drag = 0.97;
-    acc = 1;
+    maxVel = 15;
+    drag = 0.95;
+    acc = 1.2;
 }
 
 void player::update() {
