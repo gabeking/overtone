@@ -24,7 +24,7 @@ class sprite {
         void setVel(float, float);          // set velocity
         int getWidth();
         int getHeight();
-    private:
+    protected:
         texture* spriteTexture;
         std::vector<SDL_Rect*> clips;       // clipping rectangles
         SDL_Rect* currentClip;              // clipping rectangle to be rendered

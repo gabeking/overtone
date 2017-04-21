@@ -3,12 +3,13 @@ CFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -Wall -std=c++11 -g
 OBJ1 = texture
 OBJ2 = sdlTools
 OBJ3 = sprite
+OBJ4 = player
 CLASS1 = note
 
 
 FINAL = test
 
-all:     $(CLASS1)   $(OBJ1) $(OBJ2) $(OBJ3) $(FINAL)
+all:     $(CLASS1)   $(OBJ1) $(OBJ2) $(OBJ3) $(OBJ4) $(FINAL)
 
 $(CLASS1): $(CLASS1).cpp $(CLASS1).h
 		$(CMP) -c $(CLASS1).cpp -o $(CLASS1).o
@@ -22,8 +23,11 @@ $(OBJ2):     $(OBJ2).cpp
 $(OBJ3):    $(OBJ3).cpp
 	$(CMP) $(OBJ3).cpp $(CFLAGS) -c -o $(OBJ3).o
 
+$(OBJ4):	$(OBJ4).cpp
+	$(CMP) $(OBJ4).cpp $(CFLAGS) -c -o $(OBJ4).o
+
 $(FINAL):    $(OBJ1).o $(OBJ2).o $(OBJ3).o $(FINAL).cpp $(CLASS1).h
-	$(CMP) $(FINAL).cpp $(CLASS1).o $(OBJ1).o $(OBJ2).o $(OBJ3).o $(CFLAGS) -o $(FINAL)
+	$(CMP) $(FINAL).cpp $(CLASS1).o $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(CFLAGS) -o $(FINAL)
 
 clean:
 	rm ./*.o $(FINAL)
