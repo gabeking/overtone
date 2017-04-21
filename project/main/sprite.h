@@ -14,6 +14,7 @@ class sprite {
     public:
         sprite(texture*);
         ~sprite();
+        virtual void update() = 0;
         void render();                      // render sprite
         void nextClip(int);                 // move to next clipping rectangle
         void setClips(std::vector<SDL_Rect*>);   // set clipping rectangles
@@ -25,8 +26,8 @@ class sprite {
         int getHeight();
     private:
         texture* spriteTexture;
-        std::vector<SDL_Rect*> clips;            // clipping rectangles
-        SDL_Rect* currentClip;               // clipping rectangle to be rendered
+        std::vector<SDL_Rect*> clips;       // clipping rectangles
+        SDL_Rect* currentClip;              // clipping rectangle to be rendered
         float x;
         float y;
         float xVel;                         // x velocity

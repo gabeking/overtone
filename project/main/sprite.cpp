@@ -7,6 +7,7 @@
 #include "sprite.h"
 #include <vector>
 #include <SDL2/SDL.h>
+#include <cmath>
 
 sprite::sprite(texture* spriteTexture) {
     
@@ -38,11 +39,6 @@ void sprite::setClips(std::vector<SDL_Rect*> clips) {
 void sprite::updatePos() {
     x += xVel;
     y += yVel;
-}
-
-void sprite::updateVel(float dx, float dy) {
-    xVel += dx;
-    yVel += dy;
 }
 
 void sprite::setPos(float x, float y) {
