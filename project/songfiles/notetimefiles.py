@@ -5,14 +5,14 @@
 import sys
 import os
 
-libraryCommand="LD_LIBRARY_PATH=/usr/local/lib:./../aubio/aubio-0.4.5/build/src"
 
-timesCommand="./aubiopitch ./" + sys.argv[1] + " | awk '{print $1}' > times.txt"
 
-notesCommand="./aubiopitch ./" + sys.argv[1] + " | awk '{print $2}' > notes.txt"
+timesCommand="aubiopitch ./" + sys.argv[1] + " | awk '{print $1}' > fourtime.txt"
 
-os.system(libraryCommand)
-os.system("export LD_LIBRARY_PATH")
+notesCommand="aubiopitch ./" + sys.argv[1] + " | awk '{print $2}' > fournote.txt"
+
+
+
 os.system(timesCommand)
 os.system(notesCommand)
 
