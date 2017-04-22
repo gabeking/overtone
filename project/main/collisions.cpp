@@ -5,11 +5,15 @@
 
 #include <cmath>
 
-bool checkColl(float x1, float y1, float r1, float x2, float y2, float r2) {
-    float tempX = (x1-x2) * (x1-x2);
-    float tempY = (y1-y2) * (y1-y2);
+#include "sprite.h"
+
+bool checkColl(sprite* s1, sprite* s2) {
+    float tempX = (s1->getMidX() - s2->getMidX());
+    float tempY = (s1->getMidY() - s2->getMidY());
+    tempX *= tempX;
+    tempY *= tempY;
     // distance between center points is less than sum of raddii
-    if (sqrt(tempX + tempY) < (r1 + r2)) {
+    if (sqrt(tempX + tempY) < (s1->getRadius() + s2->getRadius())) {
         return true;
     }
     return false;
