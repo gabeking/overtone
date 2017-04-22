@@ -1,5 +1,5 @@
 CMP = g++
-CFLAGS = -lSDL2 -lSDL2_image -lSDL2_ttf -Wall -std=c++11 -g
+CFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -Wall -std=c++11 -g
 OBJ1 = texture
 OBJ2 = sdlTools
 OBJ3 = sprite
