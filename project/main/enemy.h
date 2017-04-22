@@ -5,12 +5,13 @@ extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
 #include "texture.h"
+#include "note.h"
 #include <vector>
 #include <SDL2/SDL.h>
 
 class enemy : public sprite { // inherits from sprite class
     public:
-        enemy(int, int, texture*);
+        enemy(note, int, int, texture*);
         virtual void update();
         void updateAcc(float, float);
         void updateVel();

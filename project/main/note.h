@@ -8,7 +8,7 @@
 
 class note {
     public:
-        note(double, double);
+        note(int, double, double);
         ~note();
         double getFreq(); // get frequency of note in Hz
         double getOnset(); // get length of note in sec

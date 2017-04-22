@@ -250,7 +250,7 @@ vector<note> set_up_music_adt(){
     
     //Pushes the times and frequencies into a vector of note classes.
     for (unsigned int counter = 0; counter < freq_vec.size() && counter < time_vec.size(); ++counter){
-		note new_note(freq_vec[counter], time_vec[counter]);
+		note new_note(SCREEN_HEIGHT, freq_vec[counter], time_vec[counter]);
 		total_notes.push_back(new_note);
 	}
 	//second and second_increment are used to 

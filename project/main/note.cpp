@@ -13,8 +13,8 @@
 using namespace std;
 
 //constructor
-note::note(double frequency, double onset) {
-	freq = frequency;
+note::note(int scrheight, double frequency, double onset) {
+	freq = (int)frequency % scrheight;
 	onset_time = onset;
 }
 

@@ -1,14 +1,15 @@
 #include <vector>
 #include <cmath>
+#include "note.h"
 #include "texture.h"
 #include "sprite.h"
 #include "enemy.h"
 
 
 
-enemy::enemy(int scrwidth, int scrheight, texture* spriteTexture) : sprite (scrwidth, scrheight, spriteTexture) {
+enemy::enemy(note enemy_note_info, int scrwidth, int scrheight, texture* spriteTexture) : sprite (scrwidth, scrheight, spriteTexture) {
     setVel(-5,0);
-    setPos(scrwidth,0);
+    setPos(scrwidth, enemy_note_info.getFreq());
     xAcc = 0;
     yAcc = 0;
     maxVel = 10;
