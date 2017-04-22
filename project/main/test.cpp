@@ -111,9 +111,8 @@ int main( int argc, char* argv[] )
             //Initialize player
             player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
             SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
-            std::cout << "Test Test\n";
             Player.setClips(gSpriteClips);
-            std::cout << "test test\n";
+            
             //Main loop flag
             bool quit = false;
 
@@ -191,21 +190,21 @@ bool loadMedia()
         gSpriteClip[1].y =   0;
         gSpriteClip[1].w = 100;
         gSpriteClip[1].h = 100;
-        gSpriteClips.push_back(&gSpriteClip[1]);
+        //gSpriteClips.push_back(&gSpriteClip[1]);
  
         //Set bottom left sprite
         gSpriteClip[2].x =   0;
         gSpriteClip[2].y = 100;
         gSpriteClip[2].w = 100;
         gSpriteClip[2].h = 100;
-        gSpriteClips.push_back(&gSpriteClip[2]);
+        //gSpriteClips.push_back(&gSpriteClip[2]);
 
         //Set bottom right sprite
         gSpriteClip[3].x = 100;
         gSpriteClip[3].y = 100;
         gSpriteClip[3].w = 100;
         gSpriteClip[3].h = 100;
-        gSpriteClips.push_back(&gSpriteClip[3]);
+        //gSpriteClips.push_back(&gSpriteClip[3]);
     }
     
     // Load second test object

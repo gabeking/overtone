@@ -35,7 +35,7 @@ void player::update() {
     if (keystates[SDL_SCANCODE_RIGHT]) {
         dx += acc;
     }
-    //nextClip();
+    nextClip();
     updateVel(dx, dy);
     updatePos();
     if ((int)this->x <= 0)
@@ -46,10 +46,13 @@ void player::update() {
         setPos(sWidth - this->width, this->y);
     if ((int)this->y + this->height >= sHeight)
         setPos(this->x, sHeight - this->height);
+    /*
     std::cout << "\nx = " << x << "\ny = " << y;
     std::cout << "\nwidth = " << width;
     std::cout << "\nheight = " << height;
-
+    std::cout << "\nsWidth = " << sWidth;
+    std::cout << "\nsHeight = " << sHeight;
+    */
 }
 
 void player::updateVel(float dx, float dy) {
