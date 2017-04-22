@@ -14,16 +14,27 @@ class sprite {
     public:
         sprite(int, int, texture*);         // screen ht screen wd texture
         ~sprite();
-        virtual void update() = 0;
         void render();                      // render sprite
-        void nextClip(int=-1);              // move to next clipping rectangle
-        void setClips(std::vector<SDL_Rect*>);   // set clipping rectangles
+        
+        // update functions
+        virtual void update() = 0;
         void updatePos();                   // update position based on velocity
         void updateVel(float, float);       // update velocity based on current velocity
+        void updateRadius();                // set radius based on height and width
+        void nextClip(int=-1);              // move to next clipping rectangle
+        
+        // set functions
         void setPos(float, float);          // set position
         void setVel(float, float);          // set velocity
+        void setClips(std::vector<SDL_Rect*>);   // set clipping rectangles
+        
+        // get functions
         int getWidth();
         int getHeight();
+        float getX();
+        float getY();
+        float getRadius();
+    
     protected:
         texture* spriteTexture;
         std::vector<SDL_Rect*> clips;       // clipping rectangles
@@ -37,6 +48,8 @@ class sprite {
         int clipNo;                         // currentClip's position in clips
         int sWidth;                         // screen width
         int sHeight;                        // screen height
+        float radius;                       // raidus for collison checking
+                                            // rad = avg(width and height)
 };
 
 #endif
