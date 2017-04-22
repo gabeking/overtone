@@ -110,7 +110,7 @@ int main( int argc, char* argv[] )
         {
             //Initialize player
             player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
-            &gSpriteSheetTextures[0]);
+            SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
             std::cout << "Test Test\n";
             Player.setClips(gSpriteClips);
             std::cout << "test test\n";

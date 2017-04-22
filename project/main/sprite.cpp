@@ -10,7 +10,7 @@
 #include <SDL2/SDL.h>
 #include <cmath>
 
-sprite::sprite(texture* spriteTexture) {
+sprite::sprite(int width, int height, texture* spriteTexture) {
     
     this->spriteTexture = spriteTexture;
     width = spriteTexture->getWidth();
@@ -22,6 +22,8 @@ sprite::sprite(texture* spriteTexture) {
     yVel = 0;
     currentClip = NULL;
     clipNo = 0;            //current clip's position in clip vector
+    sWidth = width;
+    sHeight = height;
 }
 
 sprite::~sprite() {}
@@ -53,11 +55,15 @@ void sprite::nextClip(int nextClip) { // nextClip defaults to -1
             clipNo = nextClip;
         }
     }
+    width = currentClip->w;
+    height = currentClip->h;
 }
 
 void sprite::setClips(std::vector<SDL_Rect*> clips) {
     this->clips = clips;
     currentClip = this->clips[0];
+    width = currentClip->w;
+    height = currentClip->h;
 }
 
 void sprite::updatePos() {

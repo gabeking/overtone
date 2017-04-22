@@ -13,7 +13,7 @@
 class player : public sprite { // inherits from sprite class
 
     public:
-        player(float,float, texture*);
+        player(float,float, int, int, texture*);
         virtual void update();
         void updateVel(float, float);
     private:

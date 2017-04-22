@@ -12,7 +12,7 @@
 
 class sprite { 
     public:
-        sprite(texture*);
+        sprite(int, int, texture*);         // screen ht screen wd texture
         ~sprite();
         virtual void update() = 0;
         void render();                      // render sprite
@@ -34,7 +34,9 @@ class sprite {
         float yVel;                         // y velocity
         int width;
         int height;
-        int clipNo;                        // currentClip's position in clips
+        int clipNo;                         // currentClip's position in clips
+        int sWidth;                         // screen width
+        int sHeight;                        // screen height
 };
 
 #endif

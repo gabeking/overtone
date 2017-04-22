@@ -7,11 +7,12 @@
 #include <cmath>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <iostream>
 #include "texture.h"
 #include "sprite.h"
 #include "player.h"
 
-player::player (float x, float y, texture* text) : sprite (text) {
+player::player (float x, float y, int width, int height, texture* text) : sprite (width, height, text) {
     setVel(0,0);
     setPos(x,y);
     maxVel = 15;
@@ -34,9 +35,21 @@ void player::update() {
     if (keystates[SDL_SCANCODE_RIGHT]) {
         dx += acc;
     }
-    nextClip();
+    //nextClip();
     updateVel(dx, dy);
     updatePos();
+    if ((int)this->x <= 0)
+        setPos(0, this->y);
+    if ((int)this->y <= 0)
+        setPos(this->x, 0);
+    if ((int)this->x + this->width >= sWidth)
+        setPos(sWidth - this->width, this->y);
+    if ((int)this->y + this->height >= sHeight)
+        setPos(this->x, sHeight - this->height);
+    std::cout << "\nx = " << x << "\ny = " << y;
+    std::cout << "\nwidth = " << width;
+    std::cout << "\nheight = " << height;
+
 }
 
 void player::updateVel(float dx, float dy) {
