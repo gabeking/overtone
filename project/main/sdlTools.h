@@ -14,7 +14,7 @@
 bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int screenHeight);
 
 // Shuts down SDL and frees loaded images
-void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>&);
+void close(TTF_Font*& gFont, SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>&);
 
 // gmwindow = Window we'll render to
 // gRenderer = The window renderer

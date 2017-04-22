@@ -55,19 +55,28 @@ bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int s
                         IMG_GetError() );
                     success = false;
                 }
+				//Initialize SDL_ttf 
+				if( TTF_Init() == -1 ) { 
+					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() ); 
+					success = false; 
+				}
             }
         }
     }
     return success;
 }
 
-void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>& textures) {
+void close(TTF_Font*& gFont, SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>& textures) {
     
     // Free loaded images passed as vector
     for (std::vector<texture>::iterator it = textures.begin(); it != textures.end(); it++) {
         it->freeTexture();
     }
-    
+
+	//Free global font 
+	TTF_CloseFont( gFont ); 
+	gFont = NULL;    
+
     // Destroy window
     SDL_DestroyRenderer (gRenderer);
     SDL_DestroyWindow (gWindow);
@@ -75,6 +84,7 @@ void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>&
     gRenderer = NULL;
 
     // Quit SDL subsystems
+	TTF_Quit();
     IMG_Quit();
     SDL_Quit();
 }

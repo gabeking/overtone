@@ -20,8 +20,15 @@ using namespace std;			//STL namespace
 vector<note> set_up_music_adt();		//Takes txt files and converts them
 										//to note class
 
+//Global Variables
 string PROGRAM_NAME;	//Holds program name, for usage
 
+int SCORE = 0;
+
+int DIFFICULTY = 2; 		//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
+
+string SONGNAME = "one";	//Name of song that user wishes to use
+							//will be one, two, or three
 
 void usage(int status) {	//Prints if '-h' argument is used
 	cout << "Usage: ./" << PROGRAM_NAME << "DIFFICULTY SONGFILE" << endl;
@@ -31,10 +38,7 @@ void usage(int status) {	//Prints if '-h' argument is used
 }
 
 
-int DIFFICULTY = 2; 		//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
 
-string SONGNAME = "one";	//Name of song that user wishes to use
-							//will be one, two, or three
 
 // screen dimension constants
 const int SCREEN_WIDTH = 640;
@@ -46,6 +50,10 @@ bool loadMedia();
 SDL_Window* gWindow = NULL;
 
 SDL_Renderer* gRenderer = NULL;
+
+TTF_Font *gFont = NULL;
+
+texture gTextTexture;
 
 SDL_Rect playerSpriteClips[1];
 SDL_Rect gSpriteClip[4];
@@ -153,6 +161,8 @@ int main( int argc, char* argv[] )
 
                 //Render bottom right sprite
                 //gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 3 ].w, SCREEN_HEIGHT - gSpriteClips[ 3 ].h, &gSpriteClips[ 3 ] );
+	
+				gTextTexture.render( 20, 20);				
 
                 //Update screen
                 SDL_RenderPresent( gRenderer );
@@ -161,7 +171,7 @@ int main( int argc, char* argv[] )
     }
 	
 	// Free resources and close SDL
-    close(gWindow, gRenderer, gSpriteSheetTextures);
+    close(gFont, gWindow, gRenderer, gSpriteSheetTextures);
     return 0;
 }
 
@@ -213,6 +223,19 @@ bool loadMedia()
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
+
+	//Open the font 
+	gFont = TTF_OpenFont( "fonts/zekton.ttf", 28 ); 
+	if( gFont == NULL ) { 
+		printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() ); 
+		success = false; 
+	} else { //Render text SDL_Color 
+		SDL_Color textColor = { 0, 0, 0 }; 
+		if( !gTextTexture.loadFromRenderedText(gFont, "0010", textColor ) ) { 
+			printf( "Failed to render text texture!\n" ); 
+			success = false; 
+		} 
+	}
 
     return success;
 }
