@@ -4,6 +4,7 @@ OBJ1 = texture
 OBJ2 = sdlTools
 OBJ3 = sprite
 OBJ4 = player
+OBJ5 = enemy
 CLASS1 = note
 
 
@@ -26,8 +27,11 @@ $(OBJ3):    $(OBJ3).cpp
 $(OBJ4):	$(OBJ4).cpp
 	$(CMP) $(OBJ4).cpp $(CFLAGS) -c -o $(OBJ4).o
 
-$(FINAL):    $(OBJ1).o $(OBJ2).o $(OBJ3).o $(FINAL).cpp $(CLASS1).h
-	$(CMP) $(FINAL).cpp $(CLASS1).o $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(CFLAGS) -o $(FINAL)
+$(OBJ5):	$(OBJ5).cpp
+	$(CMP) $(OBJ5).cpp $(CFLAGS) -c -o $(OBJ5).o
+
+$(FINAL):    $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(FINAL).cpp $(CLASS1).h
+	$(CMP) $(FINAL).cpp $(CLASS1).o $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(CFLAGS) -o $(FINAL)
 
 clean:
 	rm ./*.o $(FINAL)

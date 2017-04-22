@@ -1,13 +1,14 @@
-#include <texture.h>
 #include <vector>
 #include <cmath>
 #include "texture.h"
 #include "sprite.h"
 #include "enemy.h"
 
-enemy::enemy() : sprite (texture*) {
-    setVel(0,0);
-    setPos(0,0);
+
+
+enemy::enemy(int scrwidth, int scrheight, texture* spriteTexture) : sprite (scrwidth, scrheight, spriteTexture) {
+    setVel(-5,0);
+    setPos(scrwidth,0);
     xAcc = 0;
     yAcc = 0;
     maxVel = 10;
@@ -16,8 +17,6 @@ enemy::enemy() : sprite (texture*) {
 }
 
 void enemy::update() {
-    updateAcc();
-    updateVel();
     updatePos();
 }
 

@@ -10,11 +10,9 @@ extern const int SCREEN_HEIGHT;
 
 class enemy : public sprite { // inherits from sprite class
     public:
-        enemy (double cost=0.0, int id=0)
-        : Base(id), // work in progress, using non default constructor
-        VARNMAE(varvlue)
+        enemy(int, int, texture*);
         virtual void update();
-        void updateAcc();
+        void updateAcc(float, float);
         void updateVel();
     private:
         float xAcc;
@@ -22,4 +20,6 @@ class enemy : public sprite { // inherits from sprite class
         float maxVel;
         float maxAcc;
         float drag;
-}
+};
+
+#endif
