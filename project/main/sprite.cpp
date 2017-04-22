@@ -24,6 +24,7 @@ sprite::sprite(int scrwidth, int scrheight, texture* spriteTexture) {
     clipNo = 0;            //current clip's position in clip vector
     sWidth = scrwidth;
     sHeight = scrheight;
+    updateRadius();
 }
 
 sprite::~sprite() {}
@@ -57,6 +58,7 @@ void sprite::nextClip(int nextClip) { // nextClip defaults to -1
     }
     width = currentClip->w;
     height = currentClip->h;
+    updateRadius();
 }
 
 void sprite::setClips(std::vector<SDL_Rect*> clips) {
@@ -85,6 +87,30 @@ int sprite::getWidth() {
     return width;
 }
 
-int sprite:: getHeight() {
+int sprite::getHeight() {
     return height;
+}
+
+void sprite::updateRadius() {
+    radius = (float) (width + height) / 2;
+}
+
+float sprite::getX() {
+    return x;
+}
+
+float sprite::getMidX() {
+    return x + (float) width/2;
+}
+
+float sprite::getY() {
+    return y;
+}
+
+float sprite::getMidY() {
+    return y + (float) height/2;
+}
+
+float sprite::getRadius() {
+    return radius;
 }
