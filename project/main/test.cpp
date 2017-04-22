@@ -9,14 +9,16 @@
 #include <fstream>				//File i/o
 #include <stdlib.h>				//C general utilities (rand, atoi, etc.)
 #include <iostream>				//cin, cout, etc
+#include <list> 				//STL list
 using namespace std;			//STL namespace
 
+#include "enemy.h"
 #include "texture.h"			//Sets textures to objects
 #include "sdlTools.h"			//SDL utilities
 #include "note.h"				//Holds note class for enemy spawning
 #include "sprite.h"				//For general movement, spawning, etc
 #include "player.h"				//Player specific object code
-#include "collisons.h"          //Function checks collisons between
+#include "collisions.h"          //Function checks collisons between
                                 //Two sprites
 
 //Function prototypes
@@ -138,9 +140,14 @@ int main( int argc, char* argv[] )
             //Event handler
             SDL_Event e;
 
-			
 
-            
+			SDLTimer enemy_timer;
+			// start enemy timer
+			enemy_timer.start();
+		
+			double songLength = song_notes.back().getOnset();
+			
+			list<enemy> enemy_list;
             //While application is running
             while( !quit )
             {
@@ -148,7 +155,8 @@ int main( int argc, char* argv[] )
                 
                 // start cap timer
                 capTimer.start();
-
+		
+				
                 //Handle events on queue
                 while( SDL_PollEvent( &e ) != 0 ) 
                 {
@@ -163,6 +171,28 @@ int main( int argc, char* argv[] )
                 SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
                 SDL_RenderClear( gRenderer );
 
+				//check if enemy wants to be spawned
+				if (song_notes.size() > 1){
+					if (enemy_timer.getTicks() > song_notes[0].getOnset()*1000 ){
+						enemy new_enemy(song_notes[0], SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
+						new_enemy.setClips(gSpriteClips);
+						enemy_list.push_back(new_enemy);
+						if (song_notes.size() > 0){
+							song_notes.erase(song_notes.begin());
+						}		
+						cout << song_notes[0].getOnset() << endl;		
+					}
+				}
+				if (enemy_timer.getTicks() > (songLength+5)*1000){
+					break;
+				}
+				
+				list<enemy>::iterator iterator;
+				for (iterator = enemy_list.begin(); iterator != enemy_list.end(); ++iterator){
+					iterator->update();
+					iterator->render();
+				}
+				
                 // Handle player sprite
                 Player.update();
                 Player.render();
@@ -252,6 +282,8 @@ bool loadMedia()
         success = false;
     }
 
+
+
 	//Open the font 
 	gFont = TTF_OpenFont( "fonts/zekton.ttf", 28 ); 
 	if( gFont == NULL ) { 
@@ -316,22 +348,22 @@ vector<note> set_up_music_adt(){
 	//take out a certain amount of notes from the total_notes vector
 	double second;
 	double second_increment;
-	double songLength = total_notes.back().getOnset();
+
 	
 	//This changes that amount of enemies that will be spawned
 	//based on the difficulty
 	switch (DIFFICULTY) {
 		case 1:
-			second = 3;
-			second_increment = 3;
-			break;
-		case 2:
 			second = 2;
 			second_increment = 2;
 			break;
-		case 3:
+		case 2:
 			second = 1;
-			second_increment = 1;
+			second_increment =1;
+			break;
+		case 3:
+			second = 0.5;
+			second_increment = 0.5;
 			break;
 		default:
 			second = 3;
@@ -345,18 +377,27 @@ vector<note> set_up_music_adt(){
 	int upper_size = 0;
 	int note_to_choose = 0;
 	
+
+
 	//This for loop takes one note, at random, in every 1, 2, or 3 
 	//second range
 	for (unsigned int counter = 0; counter < total_notes.size(); ++counter){
 		if (total_notes[counter].getOnset() > second){
+			//cout << "second: " << second << " onset: " << total_notes[counter].getOnset() << " counter: " << counter << endl;
 			int modulo = upper_size-lower_size;
 			note_to_choose = rand() % modulo + lower_size - 1;
 			song_notes.push_back(total_notes[note_to_choose]);
+			//cout << "chosen index: " << note_to_choose << " chosen onset: " << total_notes[note_to_choose].getOnset() << endl;
 			second+=second_increment;
 			lower_size=upper_size;
 		}
 		upper_size++;
 	}
+	
+	//for (int i = 0; i < song_notes.size(); ++i){
+	//	cout << song_notes[i].getOnset() << endl;
 
+	//}
+	
 	return song_notes;
 }

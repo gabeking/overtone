@@ -14,7 +14,7 @@ using namespace std;
 
 //constructor
 note::note(int scrheight, double frequency, double onset) {
-	freq = (int)frequency % scrheight;
+	freq = (int)frequency;
 	onset_time = onset;
 }
 

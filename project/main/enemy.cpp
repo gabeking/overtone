@@ -9,7 +9,7 @@ int score_incrementer = 5;
 
 enemy::enemy(note enemy_note_info, int scrwidth, int scrheight, texture* spriteTexture) : sprite (scrwidth, scrheight, spriteTexture) {
     setVel(-5,0);
-    setPos(scrwidth, enemy_note_info.getFreq());
+    setPos(scrwidth, (int)enemy_note_info.getFreq()%(scrheight-height));
     xAcc = 0;
     yAcc = 0;
     maxVel = 10;

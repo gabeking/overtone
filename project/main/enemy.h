@@ -1,9 +1,10 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef ENEMY_H
+#define ENEMY_H
 
 extern const int SCREEN_WIDTH;
 extern const int SCREEN_HEIGHT;
 
+#include "sprite.h"
 #include "texture.h"
 #include "note.h"
 #include <vector>
