@@ -1,22 +1,37 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-#include <stdio.h>
-#include <string>
-#include <vector>
-#include <fstream>
-#include <stdlib.h>
-#include <iostream>
-using namespace std;
+//Necessary Includes
+#include <SDL2/SDL.h>			//Main SDL header
+#include <SDL2/SDL_image.h>		//SDL image loading/moving
+#include <SDL2/SDL_ttf.h>		//SDL text placement
+#include <stdio.h>				//standard input/output / filestreams
+#include <string>				//C++ string library
+#include <vector>				//C++ vector library
+#include <fstream>				//File i/o
+#include <stdlib.h>				//C general utilities (rand, atoi, etc.)
+#include <iostream>				//cin, cout, etc
+using namespace std;			//STL namespace
 
-#include "texture.h"
-#include "sdlTools.h"
-#include "note.h"
-#include "sprite.h"
-#include "player.h"
+#include "texture.h"			//Sets textures to objects
+#include "sdlTools.h"			//SDL utilities
+#include "note.h"				//Holds note class for enemy spawning
+#include "sprite.h"				//For general movement, spawning, etc
+#include "player.h"				//Player specific object code
 
-//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
-int DIFFICULTY = 3;
+//Function prototypes
+vector<note> set_up_music_adt();		//Takes txt files and converts them
+										//to note class
+
+string PROGRAM_NAME;	//Holds program name, for usage
+
+
+void usage(int status) {	//Prints if '-h' argument is used
+	cout << "Usage: ./" << PROGRAM_NAME << "DIFFICULTY SONGFILE" << endl;
+	cout << "DIFFICULTY can be 1, 2, or 3" << endl;
+	cout << "SONGFILE can be one, two, or three" << endl;
+    exit(status);
+}
+
+
+int DIFFICULTY = 2; 		//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
 
 string SONGNAME = "one";	//Name of song that user wishes to use
 							//will be one, two, or three
@@ -25,6 +40,7 @@ string SONGNAME = "one";	//Name of song that user wishes to use
 const int SCREEN_WIDTH = 640;
 const int SCREEN_HEIGHT = 480;
 
+//Necessary implementation variables for SDL
 bool loadMedia();
 
 SDL_Window* gWindow = NULL;
@@ -38,100 +54,41 @@ std::vector<texture> gSpriteSheetTextures;
 
 bool loadMedia();   // loads files for sprite textures
 
-
-int main( int argc, char* args[] )
+//Main function
+int main( int argc, char* argv[] )
 {
-	
-	srand (time(NULL));
-
-	/*
-	* Create .txt files for note class
-	* This python program will output
-	* two .txt files, notes.txt
-	* and times.txt.
-	*/
-	
-	
-	
-	/*
-	 * This will intitialize the note class as a vector of class notes
-	 */
-	vector<note> total_notes;
-	vector<note> song_notes;
-	vector<double> time_vec;
-	vector<double> freq_vec;
-	string input_string; 
-	
-	//Takes the numbers from the times.txt and 
-	//inputs them into a vector
-	string timefilename = "../songfiles/" + SONGNAME + "time.txt";
-	ifstream timefile(timefilename);
-    while (std::getline(timefile, input_string))
-    {
-        time_vec.push_back(stod(input_string));
-    }
-    
-    //Takes the numbers from the notes.txt and
-    //inputs them into a vector
-    string freqfilename = "../songfiles/" + SONGNAME + "note.txt";
-	ifstream freqfile(freqfilename);
-    while (std::getline(freqfile, input_string))
-    {
-        freq_vec.push_back(stod(input_string));
-
-    }
-    
-    //Pushes the times and frequencies into a vector of note classes.
-    for (unsigned int counter = 0; counter < freq_vec.size() && counter < time_vec.size(); ++counter){
-		note new_note(freq_vec[counter], time_vec[counter]);
-		total_notes.push_back(new_note);
-	}
-	//second and second_increment are used to 
-	//take out a certain amount of notes from the total_notes vector
-	double second;
-	double second_increment;
-	double songLength = total_notes.back().getOnset();
-	
-	//This changes that amount of enemies that will be spawned
-	//based on the difficulty
-	switch (DIFFICULTY) {
-		case 1:
-			second = 3;
-			second_increment = 3;
-			break;
-		case 2:
-			second = 2;
-			second_increment = 2;
-			break;
-		case 3:
-			second = 1;
-			second_increment = 1;
-			break;
-		default:
-			second = 3;
-			second_increment = 3;
-			break;
-	}
-
-	//lower_size and upper_size will keep the range from which
-	//the note will be drawn
-	int lower_size = 0;
-	int upper_size = 0;
-	int note_to_choose = 0;
-	
-	//This for loop takes one note, at random, in every 1, 2, or 3 
-	//second range
-	for (unsigned int counter = 0; counter < total_notes.size(); ++counter){
-		if (total_notes[counter].getOnset() > second){
-			int modulo = upper_size-lower_size;
-			note_to_choose = rand() % modulo + lower_size - 1;
-			song_notes.push_back(total_notes[note_to_choose]);
-			second+=second_increment;
-			lower_size=upper_size;
+	//Command line argument parsing
+	int argind = 1;
+    PROGRAM_NAME = argv[0];
+    while (argind < argc) {
+        char* arg = argv[argind++];
+		if (strcmp(arg, "-h")==0){
+			usage(0);
 		}
-		upper_size++;
-	}
+    	if (argind == 2){	//Checks user-inputted DIFFICULTY
+			if (strcmp(arg, "1")==0 || strcmp(arg, "2")==0 || strcmp(arg, "3")==0){
+				DIFFICULTY = atoi(arg);
+			}else{
+				cout << "DIFFICULTY input not understood, defaulting to medium." << endl;
+			}
+		}
+		if (argind == 3){	//Checks user-inputted SONGNAME
+			if (strcmp(arg, "one")==0 || strcmp(arg, "two")==0 || strcmp(arg, "three")==0){
+				SONGNAME = arg;
+			}else{
+				cout << "SONGNAME input not understood, defaulting to one." << endl;
+			}
+		}
+    }
+	cout << "DIFFICULTY is: " << DIFFICULTY << endl;
+	cout << "SONGNAME is: " << SONGNAME << endl;	
 
+	srand (time(NULL));		//Seeds random number generator
+
+	
+	vector<note> song_notes = set_up_music_adt();		//Calls adt generation
+	
+	
     //Start up SDL and create window
     if( !init(gWindow, gRenderer, SCREEN_WIDTH, SCREEN_HEIGHT) )
     {   
@@ -259,4 +216,89 @@ bool loadMedia()
     }
 
     return success;
+}
+
+
+vector<note> set_up_music_adt(){
+	
+	/*
+	 * This will intitialize the note class as a vector of class notes
+	 */
+	vector<note> total_notes;
+	vector<note> song_notes;
+	vector<double> time_vec;
+	vector<double> freq_vec;
+	string input_string; 
+	
+	//Takes the numbers from the times.txt and 
+	//inputs them into a vector
+	string timefilename = "../songfiles/" + SONGNAME + "time.txt";
+	ifstream timefile(timefilename);
+    while (std::getline(timefile, input_string))
+    {
+        time_vec.push_back(stod(input_string));
+    }
+    
+    //Takes the numbers from the notes.txt and
+    //inputs them into a vector
+    string freqfilename = "../songfiles/" + SONGNAME + "note.txt";
+	ifstream freqfile(freqfilename);
+    while (std::getline(freqfile, input_string))
+    {
+        freq_vec.push_back(stod(input_string));
+
+    }
+    
+    //Pushes the times and frequencies into a vector of note classes.
+    for (unsigned int counter = 0; counter < freq_vec.size() && counter < time_vec.size(); ++counter){
+		note new_note(freq_vec[counter], time_vec[counter]);
+		total_notes.push_back(new_note);
+	}
+	//second and second_increment are used to 
+	//take out a certain amount of notes from the total_notes vector
+	double second;
+	double second_increment;
+	double songLength = total_notes.back().getOnset();
+	
+	//This changes that amount of enemies that will be spawned
+	//based on the difficulty
+	switch (DIFFICULTY) {
+		case 1:
+			second = 3;
+			second_increment = 3;
+			break;
+		case 2:
+			second = 2;
+			second_increment = 2;
+			break;
+		case 3:
+			second = 1;
+			second_increment = 1;
+			break;
+		default:
+			second = 3;
+			second_increment = 3;
+			break;
+	}
+
+	//lower_size and upper_size will keep the range from which
+	//the note will be drawn
+	int lower_size = 0;
+	int upper_size = 0;
+	int note_to_choose = 0;
+	
+	//This for loop takes one note, at random, in every 1, 2, or 3 
+	//second range
+	for (unsigned int counter = 0; counter < total_notes.size(); ++counter){
+		if (total_notes[counter].getOnset() > second){
+			int modulo = upper_size-lower_size;
+			note_to_choose = rand() % modulo + lower_size - 1;
+			song_notes.push_back(total_notes[note_to_choose]);
+			second+=second_increment;
+			lower_size=upper_size;
+		}
+		upper_size++;
+	}
+
+	return song_notes;
 }
