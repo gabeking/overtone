@@ -16,6 +16,8 @@ using namespace std;			//STL namespace
 #include "note.h"				//Holds note class for enemy spawning
 #include "sprite.h"				//For general movement, spawning, etc
 #include "player.h"				//Player specific object code
+#include "collisons.h"          //Function checks collisons between
+                                //Two sprites
 
 //Function prototypes
 vector<note> set_up_music_adt();		//Takes txt files and converts them
