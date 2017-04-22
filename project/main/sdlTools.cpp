@@ -77,4 +77,79 @@ void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>&
     // Quit SDL subsystems
     IMG_Quit();
     SDL_Quit();
-}    
+}
+
+SDLTimer::SDLTimer() {
+    startTicks = 0;
+    pausedTicks = 0;
+
+    paused = false;
+    started = false;
+}
+
+void SDLTimer::start() {
+    
+    // start timer
+    started = true;
+    
+    // unpause
+    paused = false;
+    
+    // get current clock time
+    startTicks = SDL_GetTicks();
+    
+    // reset time since paused
+    pausedTicks = 0;
+}
+
+void SDLTimer::stop(){
+    // stop the timer
+    started = false;
+
+    //unpause the timer
+    paused = false;
+
+    // clear tick variables
+    startTicks = 0;
+    pausedTicks = 0;
+}
+
+void SDLTimer::pause() {
+    if (started && !paused) {
+        paused = true;
+
+        pausedTicks = SDL_GetTicks() - startTicks;
+        startTicks = 0;
+    }
+}
+
+void SDLTimer::unpause() {
+    if (started && paused) {
+        paused = false;
+        startTicks = SDL_GetTicks() - pausedTicks;
+        pausedTicks = 0;
+    }
+}
+
+Uint32 SDLTimer::getTicks() {
+    Uint32 time = 0;
+
+    if (started) {
+        if (paused) {
+            time = pausedTicks;
+        }
+        else {
+            time = SDL_GetTicks() - startTicks;
+        }
+    }
+
+    return time;
+}
+
+bool SDLTimer::isStarted() {
+    return started;
+}
+
+bool SDLTimer::isPaused() {
+    return paused && started;
+}

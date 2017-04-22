@@ -19,4 +19,31 @@ void close(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>&
 // gmwindow = Window we'll render to
 // gRenderer = The window renderer
 
+// timer class - for all time-related needs
+class SDLTimer {
+    public:
+        SDLTimer();
+
+        void start();
+        void stop();
+        void pause();
+        void unpause();
+
+        Uint32 getTicks();
+
+        bool isStarted();
+        bool isPaused();
+        
+    private:
+        // clock time when timer started
+        Uint32 startTicks;
+
+        // ticks stored when timer was paused
+        Uint32 pausedTicks;
+
+        //Timer status
+        bool paused;
+        bool started;
+};
+
 #endif
