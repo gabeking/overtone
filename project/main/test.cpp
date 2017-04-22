@@ -55,6 +55,9 @@ TTF_Font *gFont = NULL;
 
 texture gTextTexture;
 
+const int SCREEN_FPS = 60;
+const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
+
 SDL_Rect playerSpriteClips[1];
 SDL_Rect gSpriteClip[4];
 std::vector<SDL_Rect*> gSpriteClips;
@@ -116,6 +119,9 @@ int main( int argc, char* argv[] )
         }
         else
         {
+            // Initialize fps cap timer
+            SDLTimer capTimer;
+
             //Initialize player
             player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
             SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
@@ -132,6 +138,9 @@ int main( int argc, char* argv[] )
             {
                 /* TODO: Make animation counter */
                 
+                // start cap timer
+                capTimer.start();
+
                 //Handle events on queue
                 while( SDL_PollEvent( &e ) != 0 ) 
                 {
@@ -166,6 +175,13 @@ int main( int argc, char* argv[] )
 
                 //Update screen
                 SDL_RenderPresent( gRenderer );
+
+                // if frame finished early
+                Uint32 frameTicks = capTimer.getTicks();
+                if (frameTicks < SCREEN_TICKS_PER_FRAME) {
+                    // wait remaining time
+                    SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks);
+                }
             }
         }
     }
