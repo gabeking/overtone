@@ -15,6 +15,7 @@ class enemy : public sprite { // inherits from sprite class
         virtual void update();
         void updateAcc(float, float);
         void updateVel();
+		int  enemy_dies(int);
     private:
         float xAcc;
         float yAcc;

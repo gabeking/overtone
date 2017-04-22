@@ -5,7 +5,7 @@
 #include "sprite.h"
 #include "enemy.h"
 
-
+int score_incrementer = 5;
 
 enemy::enemy(note enemy_note_info, int scrwidth, int scrheight, texture* spriteTexture) : sprite (scrwidth, scrheight, spriteTexture) {
     setVel(-5,0);
@@ -42,4 +42,8 @@ void enemy::updateVel() {
 
     xVel *= drag;
     yVel *= drag;
+}
+
+int enemy::enemy_dies(int score){
+	return score+score_incrementer;
 }
