@@ -7,6 +7,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_mixer.h>
 #include "sdlTools.h"
 #include "texture.h"
 #include <stdio.h>
@@ -21,6 +22,12 @@ bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int s
         printf("SDL could not initialize. SDL Error: %s\n", SDL_GetError());
         success = false;
     }
+
+	//Initialize SDL 
+	if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_AUDIO ) < 0 ) { 
+		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() ); 
+		success = false; 
+	}
     else {
         // Set texture filtering to linear
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
@@ -60,13 +67,19 @@ bool init(SDL_Window*& gWindow, SDL_Renderer*& gRenderer, int screenWidth, int s
 					printf( "SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError() ); 
 					success = false; 
 				}
+		
+				//Initialize SDL_mixer 
+				if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 ) { 
+					printf( "SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError() ); 
+					success = false; 
+				}
             }
         }
     }
     return success;
 }
 
-void close(TTF_Font*& gFont, SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>& textures) {
+void close(Mix_Music*& gMusic, TTF_Font*& gFont, SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std::vector<texture>& textures) {
     
     // Free loaded images passed as vector
     for (std::vector<texture>::iterator it = textures.begin(); it != textures.end(); it++) {
@@ -77,6 +90,9 @@ void close(TTF_Font*& gFont, SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std
 	TTF_CloseFont( gFont ); 
 	gFont = NULL;    
 
+	Mix_FreeMusic( gMusic ); 
+	gMusic = NULL;
+
     // Destroy window
     SDL_DestroyRenderer (gRenderer);
     SDL_DestroyWindow (gWindow);
@@ -84,6 +100,7 @@ void close(TTF_Font*& gFont, SDL_Window*& gWindow, SDL_Renderer*& gRenderer, std
     gRenderer = NULL;
 
     // Quit SDL subsystems
+	Mix_Quit();
 	TTF_Quit();
     IMG_Quit();
     SDL_Quit();

@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>			//Main SDL header
 #include <SDL2/SDL_image.h>		//SDL image loading/moving
 #include <SDL2/SDL_ttf.h>		//SDL text placement
+#include <SDL2/SDL_mixer.h>		//SDL Music Player
 #include <stdio.h>				//standard input/output / filestreams
 #include <string>				//C++ string library
 #include <vector>				//C++ vector library
@@ -54,6 +55,8 @@ SDL_Renderer* gRenderer = NULL;
 TTF_Font *gFont = NULL;
 
 texture gTextTexture;
+
+Mix_Music *gMusic = NULL;
 
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
@@ -132,6 +135,9 @@ int main( int argc, char* argv[] )
 
             //Event handler
             SDL_Event e;
+
+			
+
             
             //While application is running
             while( !quit )
@@ -170,7 +176,10 @@ int main( int argc, char* argv[] )
 
                 //Render bottom right sprite
                 //gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 3 ].w, SCREEN_HEIGHT - gSpriteClips[ 3 ].h, &gSpriteClips[ 3 ] );
-	
+				if( Mix_PlayingMusic() == 0 ) { 
+					Mix_PlayMusic( gMusic, -1 ); 
+				}	
+
 				gTextTexture.render( 20, 20);				
 
                 //Update screen
@@ -187,7 +196,8 @@ int main( int argc, char* argv[] )
     }
 	
 	// Free resources and close SDL
-    close(gFont, gWindow, gRenderer, gSpriteSheetTextures);
+    close(gMusic, gFont, gWindow, gRenderer, gSpriteSheetTextures);
+	Mix_HaltMusic();
     return 0;
 }
 
@@ -252,6 +262,14 @@ bool loadMedia()
 			success = false; 
 		} 
 	}
+	
+	//Load music 
+	SONGNAME = "./songfiles/" + SONGNAME;
+	gMusic = Mix_LoadMUS( SONGNAME.c_str() ); 
+	if( gMusic == NULL ) { 
+		printf( "Failed to load beat music! SDL_mixer Error: %s\n", Mix_GetError() ); 
+		success = false; 
+	}
 
     return success;
 }
@@ -270,7 +288,7 @@ vector<note> set_up_music_adt(){
 	
 	//Takes the numbers from the times.txt and 
 	//inputs them into a vector
-	string timefilename = "../songfiles/" + SONGNAME + "time.txt";
+	string timefilename = "./songfiles/" + SONGNAME + "time.txt";
 	ifstream timefile(timefilename);
     while (std::getline(timefile, input_string))
     {
@@ -279,7 +297,7 @@ vector<note> set_up_music_adt(){
     
     //Takes the numbers from the notes.txt and
     //inputs them into a vector
-    string freqfilename = "../songfiles/" + SONGNAME + "note.txt";
+    string freqfilename = "./songfiles/" + SONGNAME + "note.txt";
 	ifstream freqfile(freqfilename);
     while (std::getline(freqfile, input_string))
     {
