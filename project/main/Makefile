@@ -34,7 +34,7 @@ $(OBJ4):	$(OBJ4).cpp
 
 $(OBJ5):	$(OBJ5).cpp
 	@echo Compiling $(OBJ5)...
-	$(CMP) $(OBJ5).cpp $(CFLAGS) -c -o $(OBJ5).o
+	@$(CMP) $(OBJ5).cpp $(CFLAGS) -c -o $(OBJ5).o
 
 $(FINAL):    $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(FINAL).cpp $(CLASS1).h
 	@echo Compiling $(FINAL)...
