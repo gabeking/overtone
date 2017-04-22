@@ -3,9 +3,11 @@
  * Jeff Klouda CSE20312 Final Project
  */
 
+#include "sprite.h"
+
 #ifndef COLLISIONS_H
 #define COLLISIONS_H
 
-bool checkColl(float x1, float y1, float r1, float x2, float y2, float r2);
+bool checkColl(sprite* s1, sprite* s2);
 
 #endif

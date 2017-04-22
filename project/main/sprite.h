@@ -12,7 +12,7 @@
 
 class sprite { 
     public:
-        sprite(int, int, texture*);         // screen ht screen wd texture
+        sprite(int, int, texture*);         // screen wd screen ht texture
         ~sprite();
         void render();                      // render sprite
         
