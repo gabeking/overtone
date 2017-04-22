@@ -32,7 +32,9 @@ class sprite {
         int getWidth();
         int getHeight();
         float getX();
+        float getMidX();                    // get x midpoint
         float getY();
+        float getMidY();                    // get y midpoint
         float getRadius();
     
     protected:

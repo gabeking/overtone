@@ -99,8 +99,16 @@ float sprite::getX() {
     return x;
 }
 
+float sprite::getMidX() {
+    return x + (float) width/2;
+}
+
 float sprite::getY() {
     return y;
+}
+
+float sprite::getMidY() {
+    return y + (float) height/2;
 }
 
 float sprite::getRadius() {
