@@ -18,6 +18,8 @@ using namespace std;			//STL namespace
 #include "note.h"				//Holds note class for enemy spawning
 #include "sprite.h"				//For general movement, spawning, etc
 #include "player.h"				//Player specific object code
+#include "laser.h"
+#include "background.h"
 #include "collisions.h"          //Function checks collisons between
                                 //Two sprites
 
@@ -66,7 +68,9 @@ const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
 SDL_Rect playerSpriteClips[1];
-SDL_Rect gSpriteClip[4];
+SDL_Rect laserSpriteClipArray[1];
+std::vector<SDL_Rect*> laserSpriteClips;
+SDL_Rect gSpriteClipArray[4];
 std::vector<SDL_Rect*> gSpriteClips;
 std::vector<texture> gSpriteSheetTextures;
 
@@ -118,6 +122,7 @@ int main( int argc, char* argv[] )
 
         gSpriteSheetTextures.push_back(texture0);
         gSpriteSheetTextures.push_back(texture0);
+        gSpriteSheetTextures.push_back(texture0);
 
         //Load media
         if( !loadMedia() )
@@ -134,19 +139,36 @@ int main( int argc, char* argv[] )
             SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
             Player.setClips(gSpriteClips);
             
+            // initialize backgrounds
+            float bg1Vel = -3;
+            background bg1_1(bg1Vel, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
+            background bg1_2(bg1Vel, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
+            bg1_1.setPos(0,0);
+            bg1_2.setPos(SCREEN_WIDTH, 0);
+
             //Main loop flag
             bool quit = false;
 
             //Event handler
             SDL_Event e;
 
+            SDLTimer laser_timer;
+
+            laser_timer.start();
 
 			SDLTimer enemy_timer;
-			// start enemy timer
+			
+            // start enemy timer
 			enemy_timer.start();
-		
+	        
+            // time between laser shots (in ms)
+            unsigned int laser_coolDown = 250;
+
 			double songLength = song_notes.back().getOnset();
 			
+            list<laser> laser_list;
+            int laserSpeed = 10;
+
 			list<enemy> enemy_list;
             //While application is running
             while( !quit )
@@ -170,6 +192,51 @@ int main( int argc, char* argv[] )
                 //Clear screen
                 SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
                 SDL_RenderClear( gRenderer );
+                
+                // render backgrounds
+                bg1_1.update();
+                bg1_2.update();
+                
+                //bg1_1.render();
+                //bg1_2.render();
+                
+                // Handle player sprite
+                Player.update();
+                Player.render();
+
+                // Spawn lasers
+                const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
+                if (keyStates[SDL_SCANCODE_SPACE]) {
+                    if (laser_timer.getTicks() > laser_coolDown) {
+                        laser_timer.start();
+                        laser new_laser(laserSpeed, 0, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
+                        new_laser.setClips(laserSpriteClips);
+                        new_laser.setPos(Player.getX() + Player.getWidth() - new_laser.getWidth()/2, Player.getMidY() - new_laser.getHeight()/2);
+                        laser_list.push_back(new_laser);
+                    }
+                }
+                
+                // check laser collisons
+                list<laser>::iterator it;
+                for (it = laser_list.begin(); it != laser_list.end();) {
+                    bool erased = false;
+                    it->update();
+                    it->render();
+                    list<enemy>::iterator itE;
+                    for (itE = enemy_list.begin(); itE != enemy_list.end();) { 
+                        if (checkColl(&(*it), &(*itE))) {
+                            it = laser_list.erase(it);
+                            itE = enemy_list.erase(itE);
+                            erased = true;
+                            break;
+                        }
+                        itE++;
+                    }
+                    if (!erased && !it->isOnScreen())
+                        it = laser_list.erase(it);
+                    else 
+                        it++;
+                }
 
 				//check if enemy wants to be spawned
 				if (song_notes.size() > 1){
@@ -188,31 +255,24 @@ int main( int argc, char* argv[] )
 				}
 				
 				list<enemy>::iterator iterator;
-				for (iterator = enemy_list.begin(); iterator != enemy_list.end(); ++iterator){
+				for (iterator = enemy_list.begin(); iterator != enemy_list.end();){
 					iterator->update();
 					iterator->render();
+                    // check collision with player
+                    if (checkColl(&Player, &(*iterator))) {
+                        iterator = enemy_list.erase(iterator);
+                    }
+                    else {
+                        ++iterator;
+                    }
 				}
-				
-                // Handle player sprite
-                Player.update();
-                Player.render();
 
-                //Render top left sprite
-                //gSpriteSheetTextures[0].render( 0, 0, &gSpriteClips[ 0 ] );
-
-                //Render top right sprite
-                //gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 1 ].w, 0, &gSpriteClips[ 1 ] );
-
-                //Render bottom left sprite
-                //gSpriteSheetTextures[0].render( 0, SCREEN_HEIGHT - gSpriteClips[ 2 ].h, &gSpriteClips[ 2 ] );
-
-                //Render bottom right sprite
-                //gSpriteSheetTextures[0].render( SCREEN_WIDTH - gSpriteClips[ 3 ].w, SCREEN_HEIGHT - gSpriteClips[ 3 ].h, &gSpriteClips[ 3 ] );
 				if( Mix_PlayingMusic() == 0 ) { 
 					Mix_PlayMusic( gMusic, -1 ); 
 				}	
 
 				gTextTexture.render( 20, 20);				
+
 
                 //Update screen
                 SDL_RenderPresent( gRenderer );
@@ -247,42 +307,53 @@ bool loadMedia()
     else
     {
         //Set top left sprite
-        gSpriteClip[0].x =   0;
-        gSpriteClip[0].y =   0;
-        gSpriteClip[0].w = 100;
-        gSpriteClip[0].h = 100;
-        gSpriteClips.push_back(&gSpriteClip[0]);
+        gSpriteClipArray[0].x =   0;
+        gSpriteClipArray[0].y =   0;
+        gSpriteClipArray[0].w = 100;
+        gSpriteClipArray[0].h = 100;
+        gSpriteClips.push_back(&gSpriteClipArray[0]);
 
         //Set top right sprite
-        gSpriteClip[1].x = 100;
-        gSpriteClip[1].y =   0;
-        gSpriteClip[1].w = 100;
-        gSpriteClip[1].h = 100;
-        //gSpriteClips.push_back(&gSpriteClip[1]);
+        gSpriteClipArray[1].x = 100;
+        gSpriteClipArray[1].y =   0;
+        gSpriteClipArray[1].w = 100;
+        gSpriteClipArray[1].h = 100;
+        //gSpriteClips.push_back(&gSpriteClipArray[1]);
  
         //Set bottom left sprite
-        gSpriteClip[2].x =   0;
-        gSpriteClip[2].y = 100;
-        gSpriteClip[2].w = 100;
-        gSpriteClip[2].h = 100;
-        //gSpriteClips.push_back(&gSpriteClip[2]);
+        gSpriteClipArray[2].x =   0;
+        gSpriteClipArray[2].y = 100;
+        gSpriteClipArray[2].w = 100;
+        gSpriteClipArray[2].h = 100;
+        //gSpriteClips.push_back(&gSpriteClipArray[2]);
 
         //Set bottom right sprite
-        gSpriteClip[3].x = 100;
-        gSpriteClip[3].y = 100;
-        gSpriteClip[3].w = 100;
-        gSpriteClip[3].h = 100;
-        //gSpriteClips.push_back(&gSpriteClip[3]);
+        gSpriteClipArray[3].x = 100;
+        gSpriteClipArray[3].y = 100;
+        gSpriteClipArray[3].w = 100;
+        gSpriteClipArray[3].h = 100;
+        //gSpriteClips.push_back(&gSpriteClipArray[3]);
     }
     
     // Load second test object
-    if( !gSpriteSheetTextures[1].loadFromFile( "./dot_test.png" ) )
+    if( !gSpriteSheetTextures[1].loadFromFile( "./laser.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
+    else {
+        laserSpriteClipArray[0].x =  0;
+        laserSpriteClipArray[0].y =  0;
+        laserSpriteClipArray[0].w = 25;
+        laserSpriteClipArray[0].h =  7;
+        laserSpriteClips.push_back(&laserSpriteClipArray[0]);
+    }
 
-
+    if( !gSpriteSheetTextures[2].loadFromFile( "./bg1.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
 
 	//Open the font 
 	gFont = TTF_OpenFont( "fonts/zekton.ttf", 28 ); 

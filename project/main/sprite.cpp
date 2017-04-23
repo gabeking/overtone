@@ -66,6 +66,7 @@ void sprite::setClips(std::vector<SDL_Rect*> clips) {
     currentClip = this->clips[0];
     width = currentClip->w;
     height = currentClip->h;
+    updateRadius();
 }
 
 void sprite::updatePos() {
@@ -92,7 +93,7 @@ int sprite::getHeight() {
 }
 
 void sprite::updateRadius() {
-    radius = (float) (width + height) / 2;
+    radius = (float) (width + height) / 4;
 }
 
 float sprite::getX() {

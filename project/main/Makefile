@@ -7,6 +7,7 @@ OBJ4 = player
 OBJ5 = enemy
 OBJ6 = collisions
 OBJ7 = laser
+OBJ8 = background
 CLASS1 = note
 
 
@@ -20,6 +21,7 @@ all:     	$(CLASS1)	\
 			$(OBJ5)		\
 			$(OBJ6)		\
 			$(OBJ7)		\
+			$(OBJ8)		\
 			$(FINAL)
 
 $(CLASS1): $(CLASS1).cpp $(CLASS1).h
@@ -54,9 +56,13 @@ $(OBJ7):	$(OBJ7).cpp
 	@echo Compiling $(OBJ7)...
 	@$(CMP) $(OBJ7).cpp $(CFLAGS) -c -o $(OBJ7).o
 
+$(OBJ8):	$(OBJ8).cpp
+	@echo Compiling $(OBJ8)...
+	@$(CMP) $(OBJ8).cpp $(CFLAGS) -c -o $(OBJ8).o
+
 $(FINAL):    $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(FINAL).cpp $(CLASS1).h
 	@echo Compiling $(FINAL)...
-	@$(CMP) $(FINAL).cpp $(CLASS1).o $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(OBJ6).o $(OBJ7).o $(CFLAGS) -o $(FINAL)
+	@$(CMP) $(FINAL).cpp $(CLASS1).o $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(OBJ6).o $(OBJ7).o $(OBJ8).o $(CFLAGS) -o $(FINAL)
 
 clean:
 	@echo Cleaning up...
