@@ -112,6 +112,14 @@ float sprite::getMidY() {
     return y + (float) height/2;
 }
 
+float sprite::getXVel() {
+    return xVel;
+}
+
+float sprite::getYVel() {
+    return yVel;
+}
+
 float sprite::getRadius() {
     return radius;
 }

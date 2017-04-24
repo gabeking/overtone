@@ -35,6 +35,8 @@ class sprite {
         float getMidX();                    // get x midpoint
         float getY();
         float getMidY();                    // get y midpoint
+        float getXVel();
+        float getYVel();
         float getRadius();
     
     protected:
