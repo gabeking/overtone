@@ -44,6 +44,4 @@ void enemy::updateVel() {
     yVel *= drag;
 }
 
-int enemy::enemy_dies(int score){
-	return score+score_incrementer;
-}
+

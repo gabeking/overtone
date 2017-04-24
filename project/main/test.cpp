@@ -31,6 +31,9 @@ vector<note> set_up_music_adt();		//Takes txt files and converts them
 string PROGRAM_NAME;	//Holds program name, for usage
 
 int SCORE = 0;
+int SCORE_INCREMENT = 5;
+int LIVES = 3;
+SDL_Color textColor = { 255, 255, 255 };
 
 int DIFFICULTY = 2; 		//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
 
@@ -61,6 +64,7 @@ SDL_Renderer* gRenderer = NULL;
 TTF_Font *gFont = NULL;
 
 texture gTextTexture;
+texture gTextTextureLives;
 
 Mix_Music *gMusic = NULL;
 
@@ -190,7 +194,7 @@ int main( int argc, char* argv[] )
                 }
 
                 //Clear screen
-                SDL_SetRenderDrawColor( gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+                SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );
                 SDL_RenderClear( gRenderer );
                 
                 // render backgrounds
@@ -209,7 +213,7 @@ int main( int argc, char* argv[] )
                 if (keyStates[SDL_SCANCODE_SPACE]) {
                     if (laser_timer.getTicks() > laser_coolDown) {
                         laser_timer.start();
-                        laser new_laser(laserSpeed, 0, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
+                        laser new_laser(laserSpeed, Player.getYVel(), SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
                         new_laser.setClips(laserSpriteClips);
                         new_laser.setPos(Player.getX() + Player.getWidth() - new_laser.getWidth()/2, Player.getMidY() - new_laser.getHeight()/2);
                         laser_list.push_back(new_laser);
@@ -228,6 +232,11 @@ int main( int argc, char* argv[] )
                             it = laser_list.erase(it);
                             itE = enemy_list.erase(itE);
                             erased = true;
+							SCORE += SCORE_INCREMENT;
+							string score_string_raw = to_string(SCORE);
+							string score_string = "0000000";
+							score_string.replace(score_string.length()-score_string_raw.length(), score_string_raw.length(), score_string_raw);
+							gTextTexture.loadFromRenderedText(gFont, score_string, textColor );
                             break;
                         }
                         itE++;
@@ -246,8 +255,7 @@ int main( int argc, char* argv[] )
 						enemy_list.push_back(new_enemy);
 						if (song_notes.size() > 0){
 							song_notes.erase(song_notes.begin());
-						}		
-						cout << song_notes[0].getOnset() << endl;		
+						}			
 					}
 				}
 				if (enemy_timer.getTicks() > (songLength+5)*1000){
@@ -260,6 +268,9 @@ int main( int argc, char* argv[] )
 					iterator->render();
                     // check collision with player
                     if (checkColl(&Player, &(*iterator))) {
+						LIVES--;						
+						string lives = "Lives: " + to_string(LIVES);
+						gTextTextureLives.loadFromRenderedText(gFont, lives, textColor );
                         iterator = enemy_list.erase(iterator);
                     }
                     else {
@@ -272,7 +283,7 @@ int main( int argc, char* argv[] )
 				}	
 
 				gTextTexture.render( 20, 20);				
-
+				gTextTextureLives.render(500, 20);
 
                 //Update screen
                 SDL_RenderPresent( gRenderer );
@@ -283,13 +294,44 @@ int main( int argc, char* argv[] )
                     // wait remaining time
                     SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks);
                 }
+			
+				if (LIVES < 1){
+					break;
+				}
             }
         }
     }
 	
+	Mix_HaltMusic();	
+	SDL_RenderClear( gRenderer );
+	
+const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
+	SDL_Event e;
+	bool quit = false;
+	while (!keyStates[SDL_SCANCODE_Q] && !quit){
+		while (SDL_PollEvent(&e) !=0){
+			 //User requests quit
+             if( e.type == SDL_QUIT )
+             {
+                 quit = true;
+             }
+		}
+		//keyStates = SDL_GetKeyboardState(NULL);
+		string score_string_raw = to_string(SCORE);
+		string score_string = "0000000";
+		score_string.replace(score_string.length()-score_string_raw.length(), score_string_raw.length(), score_string_raw);
+		score_string = "Final Score: " + score_string;
+		gTextTexture.loadFromRenderedText(gFont, score_string, textColor );
+		gTextTexture.render(160,200);
+		gTextTextureLives.loadFromRenderedText(gFont, "Press Q to End Game...", textColor );
+		gTextTextureLives.render(160,250);
+		SDL_RenderPresent(gRenderer);
+	}
+	
+	
 	// Free resources and close SDL
     close(gMusic, gFont, gWindow, gRenderer, gSpriteSheetTextures);
-	Mix_HaltMusic();
+	
     return 0;
 }
 
@@ -361,8 +403,13 @@ bool loadMedia()
 		printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() ); 
 		success = false; 
 	} else { //Render text SDL_Color 
-		SDL_Color textColor = { 0, 0, 0 }; 
-		if( !gTextTexture.loadFromRenderedText(gFont, "0010", textColor ) ) { 
+		//SDL_Color textColor = { 0, 0, 0 }; 
+		if( !gTextTexture.loadFromRenderedText(gFont, "0000000", textColor ) ) { 
+			printf( "Failed to render text texture!\n" ); 
+			success = false; 
+		} 
+		string lives_text = "Lives: " + to_string(LIVES);
+		if( !gTextTextureLives.loadFromRenderedText(gFont, lives_text, textColor ) ) { 
 			printf( "Failed to render text texture!\n" ); 
 			success = false; 
 		} 
