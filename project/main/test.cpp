@@ -10,6 +10,7 @@
 #include <stdlib.h>				//C general utilities (rand, atoi, etc.)
 #include <iostream>				//cin, cout, etc
 #include <list> 				//STL list
+#include <random>
 using namespace std;			//STL namespace
 
 #include "enemy.h"
@@ -19,7 +20,7 @@ using namespace std;			//STL namespace
 #include "sprite.h"				//For general movement, spawning, etc
 #include "player.h"				//Player specific object code
 #include "laser.h"
-#include "background.h"
+#include "stars.h"
 #include "collisions.h"          //Function checks collisons between
                                 //Two sprites
 
@@ -135,20 +136,19 @@ int main( int argc, char* argv[] )
         }
         else
         {
+            // Seed random number generator
+            srand(time(NULL));
+
             // Initialize fps cap timer
             SDLTimer capTimer;
 
             //Initialize player
             player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
             SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
-            Player.setClips(gSpriteClips);
+            //Player.setClips(gSpriteClips);
             
             // initialize backgrounds
-            float bg1Vel = -3;
-            background bg1_1(bg1Vel, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
-            background bg1_2(bg1Vel, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
-            bg1_1.setPos(0,0);
-            bg1_2.setPos(SCREEN_WIDTH, 0);
+            stars Stars(SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
 
             //Main loop flag
             bool quit = false;
@@ -198,12 +198,8 @@ int main( int argc, char* argv[] )
                 SDL_RenderClear( gRenderer );
                 
                 // render backgrounds
-                bg1_1.update();
-                bg1_2.update();
-                
-                //bg1_1.render();
-                //bg1_2.render();
-                
+                Stars.update();
+
                 // Handle player sprite
                 Player.update();
                 Player.render();
@@ -341,7 +337,7 @@ bool loadMedia()
     bool success = true;
 
     //Load sprite sheet texture
-    if( !gSpriteSheetTextures[0].loadFromFile( "./dots.png" ) )
+    if( !gSpriteSheetTextures[0].loadFromFile( "./playerShip.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
@@ -400,7 +396,7 @@ bool loadMedia()
     }
 
 
-    if( !gSpriteSheetTextures[2].loadFromFile( "./bg1.png" ) )
+    if( !gSpriteSheetTextures[2].loadFromFile( "./star.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;

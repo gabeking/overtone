@@ -7,7 +7,7 @@ OBJ4 = player
 OBJ5 = enemy
 OBJ6 = collisions
 OBJ7 = laser
-OBJ8 = background
+OBJ8 = stars
 CLASS1 = note
 
 
