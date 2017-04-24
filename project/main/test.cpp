@@ -127,7 +127,7 @@ int main( int argc, char* argv[] )
         gSpriteSheetTextures.push_back(texture0);
         gSpriteSheetTextures.push_back(texture0);
         gSpriteSheetTextures.push_back(texture0);
-
+		gSpriteSheetTextures.push_back(texture0);
         //Load media
         if( !loadMedia() )
         {
@@ -250,7 +250,7 @@ int main( int argc, char* argv[] )
 				//check if enemy wants to be spawned
 				if (song_notes.size() > 1){
 					if (enemy_timer.getTicks() > song_notes[0].getOnset()*1000 ){
-						enemy new_enemy(song_notes[0], SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
+						enemy new_enemy(song_notes[0], SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[3]);
 						new_enemy.setClips(gSpriteClips);
 						enemy_list.push_back(new_enemy);
 						if (song_notes.size() > 0){
@@ -391,11 +391,21 @@ bool loadMedia()
         laserSpriteClips.push_back(&laserSpriteClipArray[0]);
     }
 
+
+	// Load second test object
+    if( !gSpriteSheetTextures[3].loadFromFile( "./alienship.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
+
+
     if( !gSpriteSheetTextures[2].loadFromFile( "./bg1.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
+
 
 	//Open the font 
 	gFont = TTF_OpenFont( "fonts/zekton.ttf", 28 ); 
@@ -472,16 +482,16 @@ vector<note> set_up_music_adt(){
 	//based on the difficulty
 	switch (DIFFICULTY) {
 		case 1:
-			second = 2;
-			second_increment = 2;
+			second = 1;
+			second_increment = 1;
 			break;
 		case 2:
-			second = 1;
-			second_increment =1;
+			second = 0.5;
+			second_increment =0.5;
 			break;
 		case 3:
-			second = 0.5;
-			second_increment = 0.5;
+			second = 0.25;
+			second_increment = 0.25;
 			break;
 		default:
 			second = 3;
