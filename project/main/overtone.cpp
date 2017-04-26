@@ -13,16 +13,16 @@
 #include <random>
 using namespace std;			//STL namespace
 
-#include "enemy.h"
-#include "texture.h"			//Sets textures to objects
-#include "sdlTools.h"			//SDL utilities
-#include "note.h"				//Holds note class for enemy spawning
-#include "sprite.h"				//For general movement, spawning, etc
-#include "player.h"				//Player specific object code
-#include "laser.h"
-#include "stars.h"
-#include "collisions.h"          //Function checks collisons between
-                                //Two sprites
+#include "./classes/enemy.h"
+#include "./classes/texture.h"			//Sets textures to objects
+#include "./classes/sdlTools.h"			//SDL utilities
+#include "./classes/note.h"				//Holds note class for enemy spawning
+#include "./classes/sprite.h"				//For general movement, spawning, etc
+#include "./classes/player.h"				//Player specific object code
+#include "./classes/laser.h"
+#include "./classes/stars.h"
+#include "./classes/collisions.h"          //Function checks collisons between
+                     			           //Two sprites
 
 //Function prototypes
 vector<note> set_up_music_adt();		//Takes txt files and converts them
@@ -143,7 +143,7 @@ int main( int argc, char* argv[] )
             SDLTimer capTimer;
 
             //Initialize player
-            player Player(SCREEN_WIDTH/2, SCREEN_HEIGHT/2, 
+            player Player(20, SCREEN_HEIGHT/2, 
             SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
             //Player.setClips(gSpriteClips);
             
@@ -337,7 +337,7 @@ bool loadMedia()
     bool success = true;
 
     //Load sprite sheet texture
-    if( !gSpriteSheetTextures[0].loadFromFile( "./playerShip.png" ) )
+    if( !gSpriteSheetTextures[0].loadFromFile( "./assets/playerShip.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
@@ -374,7 +374,7 @@ bool loadMedia()
     }
     
     // Load second test object
-    if( !gSpriteSheetTextures[1].loadFromFile( "./laser.png" ) )
+    if( !gSpriteSheetTextures[1].loadFromFile( "./assets/laser.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
@@ -389,14 +389,14 @@ bool loadMedia()
 
 
 	// Load second test object
-    if( !gSpriteSheetTextures[3].loadFromFile( "./alienship.png" ) )
+    if( !gSpriteSheetTextures[3].loadFromFile( "./assets/alienship.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
 
 
-    if( !gSpriteSheetTextures[2].loadFromFile( "./star.png" ) )
+    if( !gSpriteSheetTextures[2].loadFromFile( "./assets/star.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;

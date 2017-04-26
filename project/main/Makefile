@@ -1,17 +1,17 @@
 CMP = g++
 CFLAGS = -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -Wall -std=c++11 -g
-OBJ1 = texture
-OBJ2 = sdlTools
-OBJ3 = sprite
-OBJ4 = player
-OBJ5 = enemy
-OBJ6 = collisions
-OBJ7 = laser
-OBJ8 = stars
-CLASS1 = note
+OBJ1 = ./classes/texture
+OBJ2 = ./classes/sdlTools
+OBJ3 = ./classes/sprite
+OBJ4 = ./classes/player
+OBJ5 = ./classes/enemy
+OBJ6 = ./classes/collisions
+OBJ7 = ./classes/laser
+OBJ8 = ./classes/stars
+CLASS1 = ./classes/note
 
 
-FINAL = test
+FINAL = overtone
 
 all:     	$(CLASS1)	\
 			$(OBJ1)		\
@@ -66,4 +66,4 @@ $(FINAL):    $(OBJ1).o $(OBJ2).o $(OBJ3).o $(OBJ4).o $(OBJ5).o $(FINAL).cpp $(CL
 
 clean:
 	@echo Cleaning up...
-	@rm ./*.o $(FINAL)
+	@rm ./classes/*.o $(FINAL)
