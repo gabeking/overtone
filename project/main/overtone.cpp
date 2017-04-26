@@ -34,6 +34,10 @@ string PROGRAM_NAME;	//Holds program name, for usage
 int SCORE = 0;
 int SCORE_INCREMENT = 5;
 int LIVES = 3;
+
+int MULTIPLIER = 1;
+int STREAK = 0;
+
 SDL_Color textColor = { 255, 255, 255 };
 
 int DIFFICULTY = 2; 		//Game Difficulty (1: "easy", 2: "medium", or 3: "hard")
@@ -66,6 +70,7 @@ TTF_Font *gFont = NULL;
 
 texture gTextTexture;
 texture gTextTextureLives;
+texture gTextTextureMultiplier;
 
 Mix_Music *gMusic = NULL;
 
@@ -227,8 +232,18 @@ int main( int argc, char* argv[] )
                         if (checkColl(&(*it), &(*itE))) {
                             it = laser_list.erase(it);
                             itE = enemy_list.erase(itE);
+							STREAK+=1;
+							if (STREAK <= 10){
+								MULTIPLIER = 1;
+							}else if (STREAK <=20){
+								MULTIPLIER = 2;
+							}else{
+								MULTIPLIER = 3;
+							}
+							string multiplies = "Multiplier: " + to_string(MULTIPLIER);
+							gTextTextureMultiplier.loadFromRenderedText(gFont, multiplies, textColor );
                             erased = true;
-							SCORE += SCORE_INCREMENT;
+							SCORE += SCORE_INCREMENT * MULTIPLIER;
 							string score_string_raw = to_string(SCORE);
 							string score_string = "0000000";
 							score_string.replace(score_string.length()-score_string_raw.length(), score_string_raw.length(), score_string_raw);
@@ -267,6 +282,10 @@ int main( int argc, char* argv[] )
 						LIVES--;						
 						string lives = "Lives: " + to_string(LIVES);
 						gTextTextureLives.loadFromRenderedText(gFont, lives, textColor );
+						STREAK = 0;
+						MULTIPLIER = 1;
+						string multiplies = "Multiplier: " + to_string(MULTIPLIER);
+						gTextTextureMultiplier.loadFromRenderedText(gFont, multiplies, textColor );
                         iterator = enemy_list.erase(iterator);
                     }
                     else {
@@ -280,7 +299,7 @@ int main( int argc, char* argv[] )
 
 				gTextTexture.render( 20, 20);				
 				gTextTextureLives.render(500, 20);
-
+				gTextTextureMultiplier.render(20, 400);
                 //Update screen
                 SDL_RenderPresent( gRenderer );
 
@@ -416,6 +435,11 @@ bool loadMedia()
 		} 
 		string lives_text = "Lives: " + to_string(LIVES);
 		if( !gTextTextureLives.loadFromRenderedText(gFont, lives_text, textColor ) ) { 
+			printf( "Failed to render text texture!\n" ); 
+			success = false; 
+		}
+		string multiplier_text = "Multiplier: " + to_string(MULTIPLIER);
+		if( !gTextTextureMultiplier.loadFromRenderedText(gFont, multiplier_text, textColor ) ) { 
 			printf( "Failed to render text texture!\n" ); 
 			success = false; 
 		} 
