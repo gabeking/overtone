@@ -8,14 +8,14 @@
 
 laser::laser(float xVel, float yVel, int sW, int sH, 
 texture* text) : sprite (sW, sH, text) {
-    setVel(xVel, yVel);
+    setVel(xVel, yVel); // inherited constructor sets velocity as appropriate
 }
 
 void laser::update() {
     updatePos();
 }
 
-bool laser::isOnScreen() {
+bool laser::isOnScreen() { // if x and y position are properly confined within screen boundaries, TRUE, else, FALSE
     if (x < 0 || y < 0 || (int) x + width > sWidth || 
     (int) y + height > sHeight)
     {

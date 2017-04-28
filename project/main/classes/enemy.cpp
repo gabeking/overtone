@@ -8,7 +8,7 @@
 int score_incrementer = 5;
 
 enemy::enemy(note enemy_note_info, int scrwidth, int scrheight, texture* spriteTexture) : sprite (scrwidth, scrheight, spriteTexture) {
-    setVel(-10,0);
+    setVel(-10,0); // enemy class has inherited constructor, initializing velocity, acc, drag and position as appropriate for a not spawning on the right of the screen and moving left
     setPos(scrwidth, (int)enemy_note_info.getFreq()%(scrheight-height));
     xAcc = 0;
     yAcc = 0;
@@ -18,11 +18,11 @@ enemy::enemy(note enemy_note_info, int scrwidth, int scrheight, texture* spriteT
 }
 
 void enemy::update() {
-    updatePos();
+    updatePos(); // standard position update on private members called
 }
 
 void enemy::updateAcc(float dx, float dy) {
-    xAcc += dx;
+    xAcc += dx; // component acceleration updated given x and y differentials -- verified to not exceed defined maxAcc
     yAcc += dy;
     float acc = xAcc*xAcc + yAcc*yAcc;
     if (acc > maxAcc) {
@@ -32,7 +32,7 @@ void enemy::updateAcc(float dx, float dy) {
 }
 
 void enemy::updateVel() {
-    xVel += xAcc;
+    xVel += xAcc; // component velocity updated using acceleration members
     yVel += yAcc;
     float vel = xVel*xVel + yVel*yVel;
     if (vel > maxVel) { // limit velocity to max
@@ -40,7 +40,7 @@ void enemy::updateVel() {
         yVel *= sqrt(maxVel/vel);
     }
 
-    xVel *= drag;
+    xVel *= drag; // drag factor applied
     yVel *= drag;
 }
 

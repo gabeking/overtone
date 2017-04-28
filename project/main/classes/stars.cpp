@@ -7,23 +7,23 @@
 #include "sprite.h"
 
 star::star (int sW, int sH, texture* text) : sprite (sW, sH, text) {
-    float scrollSpeed = -2;
+    float scrollSpeed = -2; // stars initialized to random position/slow left scroll using inherited constructor
     setPos(sW, rand() % sH);
     setVel(scrollSpeed, 0);
 }
 
 void star::update() {
-    updatePos();
+    updatePos(); // position update shortcut (using base class method)
 }
 
 bool star::isOffScreen() {
-    if (x < 0)
+    if (x < 0) // check whether star should still be rendered
         return true;
     return false;
 }
 
 stars::stars(int sW, int sH, texture* text) {
-    sWidth = sW;
+    sWidth = sW; // populates stars when called, with density defined by spawn_rate. stored in list, which can easily have members popped when stars float offscreen
     sHeight = sH;
     starText = text;
     spawn_rate = 100;
@@ -35,16 +35,16 @@ stars::stars(int sW, int sH, texture* text) {
 }
 
 stars::~stars() {
-    star_list.clear();
+    star_list.clear(); // remove all stars
 }
 
 void stars::update() {
-    if ((int)rand()%1000 <= spawn_rate) {
+    if ((int)rand()%1000 <= spawn_rate) { // determines when to spawn new stars
         star newStar(sWidth, sHeight, starText);
         star_list.push_back(newStar);
     }
     for (auto it = star_list.begin(); it != star_list.end();) {
-        it->render();
+        it->render(); // actual deallocation/removal of "expired" stars
         if (it->isOffScreen()) {
             it = star_list.erase(it);
             continue;
