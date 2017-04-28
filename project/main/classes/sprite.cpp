@@ -123,3 +123,5 @@ float sprite::getYVel() {
 float sprite::getRadius() {
     return radius;
 }
+
+void sprite::update(){}

@@ -17,7 +17,7 @@ class sprite {
         void render();                      // render sprite
         
         // update functions
-        virtual void update() = 0;
+        virtual void update();
         void updatePos();                   // update position based on velocity
         void updateVel(float, float);       // update velocity based on current velocity
         void updateRadius();                // set radius based on height and width

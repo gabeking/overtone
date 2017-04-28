@@ -134,6 +134,8 @@ int main( int argc, char* argv[] )
         gSpriteSheetTextures.push_back(texture0);
         gSpriteSheetTextures.push_back(texture0);
 		gSpriteSheetTextures.push_back(texture0);
+		gSpriteSheetTextures.push_back(texture0);
+		gSpriteSheetTextures.push_back(texture0);
         //Load media
         if( !loadMedia() )
         {
@@ -154,6 +156,13 @@ int main( int argc, char* argv[] )
             
             // initialize backgrounds
             stars Stars(SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
+		
+			//Initialize top bar
+			sprite TopBar (SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[4]);
+
+			//Initialize bottom bar
+			sprite BottomBar (SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[5]);
+			BottomBar.setPos(0, 440);
 
             //Main loop flag
             bool quit = false;
@@ -297,9 +306,11 @@ int main( int argc, char* argv[] )
 					Mix_PlayMusic( gMusic, -1 ); 
 				}	
 
-				gTextTexture.render( 20, 20);				
-				gTextTextureLives.render(500, 20);
-				gTextTextureMultiplier.render(20, 400);
+				BottomBar.render();
+				TopBar.render();
+				gTextTexture.render( 10, 3);				
+				gTextTextureLives.render(575, 3);
+				gTextTextureMultiplier.render(10, 460);
                 //Update screen
                 SDL_RenderPresent( gRenderer );
 
@@ -421,9 +432,21 @@ bool loadMedia()
         success = false;
     }
 
+	if( !gSpriteSheetTextures[4].loadFromFile( "./assets/bartop.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
+
+	if( !gSpriteSheetTextures[5].loadFromFile( "./assets/barbottom.png" ) )
+    {
+        printf( "Failed to load sprite sheet texture!\n" );
+        success = false;
+    }
+
 
 	//Open the font 
-	gFont = TTF_OpenFont( "fonts/zekton.ttf", 28 ); 
+	gFont = TTF_OpenFont( "fonts/zekton.ttf", 15 ); 
 	if( gFont == NULL ) { 
 		printf( "Failed to load font! SDL_ttf Error: %s\n", TTF_GetError() ); 
 		success = false; 
