@@ -77,11 +77,11 @@ Mix_Music *gMusic = NULL;
 const int SCREEN_FPS = 60;
 const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
 
-SDL_Rect playerSpriteClips[1];
+SDL_Rect playerSpriteClipArray[8];
 SDL_Rect laserSpriteClipArray[1];
 std::vector<SDL_Rect*> laserSpriteClips;
 SDL_Rect gSpriteClipArray[4];
-std::vector<SDL_Rect*> gSpriteClips;
+std::vector<SDL_Rect*> playerSpriteClips;
 std::vector<texture> gSpriteSheetTextures;
 
 bool loadMedia();   // loads files for sprite textures
@@ -152,7 +152,7 @@ int main( int argc, char* argv[] )
             //Initialize player
             player Player(20, SCREEN_HEIGHT/2, 
             SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[0]);
-            //Player.setClips(gSpriteClips);
+            Player.setClips(playerSpriteClips);
             
             // initialize backgrounds
             stars Stars(SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[2]);
@@ -188,6 +188,11 @@ int main( int argc, char* argv[] )
             int laserSpeed = 10;
 
 			list<enemy> enemy_list;
+            
+            // Animation counter = number of frames per change in sprite
+            int animCounterMax = 5;
+            int animCounter = 0;
+            
             //While application is running
             while( !quit )
             {
@@ -196,7 +201,7 @@ int main( int argc, char* argv[] )
                 // start cap timer
                 capTimer.start();
 		
-				
+
                 //Handle events on queue
                 while( SDL_PollEvent( &e ) != 0 ) 
                 {
@@ -215,6 +220,12 @@ int main( int argc, char* argv[] )
                 Stars.update();
 
                 // Handle player sprite
+                animCounter++;
+                if (animCounter >= animCounterMax) {
+                    Player.nextClip();
+                    animCounter = 0;
+                }
+
                 Player.update();
                 Player.render();
 
@@ -271,7 +282,7 @@ int main( int argc, char* argv[] )
 				if (song_notes.size() > 1){
 					if (enemy_timer.getTicks() > song_notes[0].getOnset()*1000 ){
 						enemy new_enemy(song_notes[0], SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[3]);
-						new_enemy.setClips(gSpriteClips);
+						//new_enemy.setClips(gSpriteClips);
 						enemy_list.push_back(new_enemy);
 						if (song_notes.size() > 0){
 							song_notes.erase(song_notes.begin());
@@ -366,8 +377,8 @@ bool loadMedia()
     //Loading success flag
     bool success = true;
 
-    //Load sprite sheet texture
-    if( !gSpriteSheetTextures[0].loadFromFile( "./assets/playerShip.png" ) )
+    //Load Player texture
+    if( !gSpriteSheetTextures[0].loadFromFile( "./assets/playershipv2.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
@@ -375,35 +386,63 @@ bool loadMedia()
     else
     {
         //Set top left sprite
-        gSpriteClipArray[0].x =   0;
-        gSpriteClipArray[0].y =   0;
-        gSpriteClipArray[0].w = 100;
-        gSpriteClipArray[0].h = 100;
-        gSpriteClips.push_back(&gSpriteClipArray[0]);
+        playerSpriteClipArray[0].x = 0;
+        playerSpriteClipArray[0].y = 0;
+        playerSpriteClipArray[0].w = 51;
+        playerSpriteClipArray[0].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[0]);
 
-        //Set top right sprite
-        gSpriteClipArray[1].x = 100;
-        gSpriteClipArray[1].y =   0;
-        gSpriteClipArray[1].w = 100;
-        gSpriteClipArray[1].h = 100;
-        //gSpriteClips.push_back(&gSpriteClipArray[1]);
- 
-        //Set bottom left sprite
-        gSpriteClipArray[2].x =   0;
-        gSpriteClipArray[2].y = 100;
-        gSpriteClipArray[2].w = 100;
-        gSpriteClipArray[2].h = 100;
-        //gSpriteClips.push_back(&gSpriteClipArray[2]);
+        //Set top left sprite
+        playerSpriteClipArray[1].x = 51;
+        playerSpriteClipArray[1].y = 0;
+        playerSpriteClipArray[1].w = 51;
+        playerSpriteClipArray[1].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[1]);
 
-        //Set bottom right sprite
-        gSpriteClipArray[3].x = 100;
-        gSpriteClipArray[3].y = 100;
-        gSpriteClipArray[3].w = 100;
-        gSpriteClipArray[3].h = 100;
-        //gSpriteClips.push_back(&gSpriteClipArray[3]);
+        //Set top left sprite
+        playerSpriteClipArray[2].x = 0;
+        playerSpriteClipArray[2].y = 20;
+        playerSpriteClipArray[2].w = 51;
+        playerSpriteClipArray[2].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[2]);
+
+        //Set top left sprite
+        playerSpriteClipArray[3].x = 51;
+        playerSpriteClipArray[3].y = 20;
+        playerSpriteClipArray[3].w = 51;
+        playerSpriteClipArray[3].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[3]);
+
+        //Set top left sprite
+        playerSpriteClipArray[4].x = 0;
+        playerSpriteClipArray[4].y = 40;
+        playerSpriteClipArray[4].w = 51;
+        playerSpriteClipArray[4].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[4]);
+
+        //Set top left sprite
+        playerSpriteClipArray[5].x = 51;
+        playerSpriteClipArray[5].y = 40;
+        playerSpriteClipArray[5].w = 51;
+        playerSpriteClipArray[5].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[5]);
+
+        //Set top left sprite
+        playerSpriteClipArray[6].x = 0;
+        playerSpriteClipArray[6].y = 60;
+        playerSpriteClipArray[6].w = 51;
+        playerSpriteClipArray[6].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[6]);
+
+        //Set top left sprite
+        playerSpriteClipArray[7].x = 51;
+        playerSpriteClipArray[7].y = 60;
+        playerSpriteClipArray[7].w = 51;
+        playerSpriteClipArray[7].h = 20;
+        playerSpriteClips.push_back(&playerSpriteClipArray[7]);
     }
     
-    // Load second test object
+    // Load laser texture 
     if( !gSpriteSheetTextures[1].loadFromFile( "./assets/laser.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
