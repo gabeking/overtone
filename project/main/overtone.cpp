@@ -359,9 +359,9 @@ const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
 		score_string.replace(score_string.length()-score_string_raw.length(), score_string_raw.length(), score_string_raw);
 		score_string = "Final Score: " + score_string;
 		gTextTexture.loadFromRenderedText(gFont, score_string, textColor );
-		gTextTexture.render(160,200);
+		gTextTexture.render(230,200);
 		gTextTextureLives.loadFromRenderedText(gFont, "Press Q to End Game...", textColor );
-		gTextTextureLives.render(160,250);
+		gTextTextureLives.render(230, 250);
 		SDL_RenderPresent(gRenderer);
 	}
 	
