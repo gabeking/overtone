@@ -19,6 +19,7 @@ enemy::enemy(note enemy_note_info, int scrwidth, int scrheight, texture* spriteT
 
 void enemy::update() {
     updatePos(); // standard position update on private members called
+
 }
 
 void enemy::updateAcc(float dx, float dy) {

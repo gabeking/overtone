@@ -83,6 +83,8 @@ std::vector<SDL_Rect*> laserSpriteClips;
 SDL_Rect gSpriteClipArray[4];
 std::vector<SDL_Rect*> playerSpriteClips;
 std::vector<texture> gSpriteSheetTextures;
+SDL_Rect enemySpriteClipArray[6];
+std::vector<SDL_Rect*> enemySpriteClips;
 
 bool loadMedia();   // loads files for sprite textures
 
@@ -223,7 +225,6 @@ int main( int argc, char* argv[] )
                 animCounter++;
                 if (animCounter >= animCounterMax) {
                     Player.nextClip();
-                    animCounter = 0;
                 }
 
                 Player.update();
@@ -282,7 +283,7 @@ int main( int argc, char* argv[] )
 				if (song_notes.size() > 1){
 					if (enemy_timer.getTicks() > song_notes[0].getOnset()*1000 ){
 						enemy new_enemy(song_notes[0], SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[3]);
-						//new_enemy.setClips(gSpriteClips);
+						new_enemy.setClips(enemySpriteClips);
 						enemy_list.push_back(new_enemy);
 						if (song_notes.size() > 0){
 							song_notes.erase(song_notes.begin());
@@ -296,6 +297,9 @@ int main( int argc, char* argv[] )
 				list<enemy>::iterator iterator;
 				for (iterator = enemy_list.begin(); iterator != enemy_list.end();){
 					iterator->update();
+                    if (animCounter >= animCounterMax) {
+                        iterator->nextClip();
+                    }
 					iterator->render();
                     // check collision with player
                     if (checkColl(&Player, &(*iterator))) {
@@ -322,6 +326,11 @@ int main( int argc, char* argv[] )
 				gTextTexture.render( 10, 3);				
 				gTextTextureLives.render(575, 3);
 				gTextTextureMultiplier.render(10, 460);
+                
+                if (animCounter >= animCounterMax) {
+                    animCounter = 0; 
+                }
+
                 //Update screen
                 SDL_RenderPresent( gRenderer );
 
@@ -458,10 +467,48 @@ bool loadMedia()
 
 
 	// Load second test object
-    if( !gSpriteSheetTextures[3].loadFromFile( "./assets/alienship.png" ) )
+    if( !gSpriteSheetTextures[3].loadFromFile( "./assets/alienshipv2.png"))
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
+    }
+    else {
+        enemySpriteClipArray[0].x = 0;
+        enemySpriteClipArray[0].y = 0;
+        enemySpriteClipArray[0].w = 32;
+        enemySpriteClipArray[0].h = 22;
+        enemySpriteClips.push_back(&enemySpriteClipArray[0]);
+    
+        enemySpriteClipArray[1].x = 32;
+        enemySpriteClipArray[1].y = 0;
+        enemySpriteClipArray[1].w = 32;
+        enemySpriteClipArray[1].h = 22;
+        enemySpriteClips.push_back(&enemySpriteClipArray[1]);
+    
+        enemySpriteClipArray[2].x = 0;
+        enemySpriteClipArray[2].y = 22;
+        enemySpriteClipArray[2].w = 32;
+        enemySpriteClipArray[2].h = 22;
+        enemySpriteClips.push_back(&enemySpriteClipArray[2]);
+    
+        enemySpriteClipArray[3].x = 32;
+        enemySpriteClipArray[3].y = 22;
+        enemySpriteClipArray[3].w = 32;
+        enemySpriteClipArray[3].h = 22;
+        enemySpriteClips.push_back(&enemySpriteClipArray[3]);
+    
+        enemySpriteClipArray[4].x = 0;
+        enemySpriteClipArray[4].y = 22;
+        enemySpriteClipArray[4].w = 32;
+        enemySpriteClipArray[4].h = 22;
+        enemySpriteClips.push_back(&enemySpriteClipArray[4]);
+    
+        enemySpriteClipArray[5].x = 32;
+        enemySpriteClipArray[5].y = 0;
+        enemySpriteClipArray[5].w = 32;
+        enemySpriteClipArray[5].h = 22;
+        enemySpriteClips.push_back(&enemySpriteClipArray[5]);
+    
     }
 
 
