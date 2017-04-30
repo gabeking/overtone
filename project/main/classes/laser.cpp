@@ -8,7 +8,7 @@
 
 laser::laser(float xVel, float yVel, int sW, int sH, 
 texture* text) : sprite (sW, sH, text) {
-    setVel(xVel, yVel); // inherited constructor sets velocity as appropriate
+    setVel(xVel, yVel);
 }
 
 void laser::update() {

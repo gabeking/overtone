@@ -8,6 +8,7 @@
 #ifndef COLLISIONS_H
 #define COLLISIONS_H
 
+// returns true if two sprites are colliding
 bool checkColl(sprite* s1, sprite* s2);
 
 #endif

@@ -9,7 +9,9 @@
 class laser : public sprite {
     public:
         laser(float, float, int, int, texture*);
+        // updates position of sprite
         virtual void update();
+        // returns true is still in window
         bool isOnScreen();
 };
 

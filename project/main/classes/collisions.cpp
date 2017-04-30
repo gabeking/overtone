@@ -8,7 +8,9 @@
 #include "sprite.h"
 
 bool checkColl(sprite* s1, sprite* s2) {
+    // difference in sprite x midpoints
     float tempX = (s1->getMidX() - s2->getMidX());
+    // difference in sprite y midpoints
     float tempY = (s1->getMidY() - s2->getMidY());
     tempX *= tempX;
     tempY *= tempY;

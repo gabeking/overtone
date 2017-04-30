@@ -17,9 +17,10 @@ class player : public sprite { // inherits from sprite class
         virtual void update();
         void updateVel(float, float);
     private:
-        float acc;
-        float maxVel;
-        float drag;
+        float acc;          // accelertation
+        float maxVel;       // max velocity
+        float drag;         // controls rate at which ship loses speed
+                            //  Set between 0 and 1
 };
 
 #endif

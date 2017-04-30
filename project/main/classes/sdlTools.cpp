@@ -3,8 +3,6 @@
  * Jeff Klouda - based on code from Lazy Foo' Productions (http://lazyfoo.net/)
  */
 
-// TODO Adapt loadMedia() function from test.cpp (maybe store sprites in a vector?
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_mixer.h>
