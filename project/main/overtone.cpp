@@ -183,7 +183,7 @@ int main( int argc, char* argv[] )
 			enemy_timer.start();
 	        
             // time between laser shots (in ms)
-            unsigned int laser_coolDown = 50;
+            unsigned int laser_coolDown = 60;
 
 			double songLength = song_notes.back().getOnset();
 			
@@ -203,8 +203,6 @@ int main( int argc, char* argv[] )
             //While application is running
             while( !quit )
             {
-                /* TODO: Make animation counter */
-                
                 // start cap timer
                 capTimer.start();
 		
@@ -220,10 +218,10 @@ int main( int argc, char* argv[] )
                 }
 
                 //Clear screen
-                SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x00, 0xFF );
+                SDL_SetRenderDrawColor( gRenderer, 0x00, 0x00, 0x03, 0xFF );
                 SDL_RenderClear( gRenderer );
                 
-                // render backgrounds
+                // render background stars
                 Stars.update();
 
                 // Handle player sprite
@@ -238,13 +236,18 @@ int main( int argc, char* argv[] )
                 // Spawn lasers
                 const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
                 if (keyStates[SDL_SCANCODE_SPACE]) {
+                    // check if cooldown period has passed
                     if (laser_timer.getTicks() > laser_coolDown) {
                         laser_timer.start();
+                        
+                        // add new laser to laser vector
                         laser new_laser1(laserSpeed, Player.getYVel(), SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
                         new_laser1.setClips(laserSpriteClips);
                         new_laser1.setPos(Player.getX() + Player.getWidth() - new_laser1.getWidth()/2, Player.getMidY() - new_laser1.getHeight()/2);
                         laser_list.push_back(new_laser1);
-						if (STREAK >= 50){
+						
+                        if (STREAK >= 50){
+                            // load triple lasers for higher streaks
 							gTextTexturePowerUp.loadFromRenderedText(gFont, "Power Up: TriLaser", textColor );
 							laser new_laser2(laserSpeed, Player.getYVel()-1, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
 		                    new_laser2.setClips(laserSpriteClips);
@@ -307,7 +310,8 @@ int main( int argc, char* argv[] )
 					}
 				}
 
-				colorCounter++;
+				// update enemy color based on song frequency
+                colorCounter++;
 				if (song_notes.size() > 0){
 					if (colorCounter >= colorCounterMax){
 						colorCounter=0;
@@ -325,7 +329,8 @@ int main( int argc, char* argv[] )
 					break;
 				}
 				
-				list<enemy>::iterator iterator;
+				// update enemies
+                list<enemy>::iterator iterator;
 				for (iterator = enemy_list.begin(); iterator != enemy_list.end();){
 					iterator->update();
                     if (animCounter >= animCounterMax) {
@@ -353,13 +358,15 @@ int main( int argc, char* argv[] )
 					Mix_PlayMusic( gMusic, -1 ); 
 				}	
 
-				BottomBar.render();
+				// Render UI bars on top and bottom of window
+                BottomBar.render();
 				TopBar.render();
 				gTextTexture.render( 10, 3);				
 				gTextTextureLives.render(575, 3);
 				gTextTextureMultiplier.render(10, 460);
 				gTextTexturePowerUp.render(500,460);
                 
+                // Reset animation counter
                 if (animCounter >= animCounterMax) {
                     animCounter = 0; 
                 }
@@ -374,17 +381,19 @@ int main( int argc, char* argv[] )
                     SDL_Delay( SCREEN_TICKS_PER_FRAME - frameTicks);
                 }
 			
-				if (LIVES < 1){
+				// end game when player has no remaining lives
+                if (LIVES < 1){
 					break;
 				}
             }
         }
     }
-	
+
+    // end game state
 	Mix_HaltMusic();	
 	SDL_RenderClear( gRenderer );
 	
-const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
+    const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
 	SDL_Event e;
 	bool quit = false;
 	while (!keyStates[SDL_SCANCODE_Q] && !quit){
@@ -395,8 +404,8 @@ const Uint8 *keyStates = SDL_GetKeyboardState(NULL);
                  quit = true;
              }
 		}
-		//keyStates = SDL_GetKeyboardState(NULL);
-		string score_string_raw = to_string(SCORE);
+		// display user score
+        string score_string_raw = to_string(SCORE);
 		string score_string = "0000000";
 		score_string.replace(score_string.length()-score_string_raw.length(), score_string_raw.length(), score_string_raw);
 		score_string = "Final Score: " + score_string;
@@ -427,56 +436,49 @@ bool loadMedia()
     }
     else
     {
-        //Set top left sprite
+        // Set player clipping rectangles
         playerSpriteClipArray[0].x = 0;
         playerSpriteClipArray[0].y = 0;
         playerSpriteClipArray[0].w = 51;
         playerSpriteClipArray[0].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[0]);
 
-        //Set top left sprite
         playerSpriteClipArray[1].x = 51;
         playerSpriteClipArray[1].y = 0;
         playerSpriteClipArray[1].w = 51;
         playerSpriteClipArray[1].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[1]);
 
-        //Set top left sprite
         playerSpriteClipArray[2].x = 0;
         playerSpriteClipArray[2].y = 20;
         playerSpriteClipArray[2].w = 51;
         playerSpriteClipArray[2].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[2]);
 
-        //Set top left sprite
         playerSpriteClipArray[3].x = 51;
         playerSpriteClipArray[3].y = 20;
         playerSpriteClipArray[3].w = 51;
         playerSpriteClipArray[3].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[3]);
 
-        //Set top left sprite
         playerSpriteClipArray[4].x = 0;
         playerSpriteClipArray[4].y = 40;
         playerSpriteClipArray[4].w = 51;
         playerSpriteClipArray[4].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[4]);
 
-        //Set top left sprite
         playerSpriteClipArray[5].x = 51;
         playerSpriteClipArray[5].y = 40;
         playerSpriteClipArray[5].w = 51;
         playerSpriteClipArray[5].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[5]);
 
-        //Set top left sprite
         playerSpriteClipArray[6].x = 0;
         playerSpriteClipArray[6].y = 60;
         playerSpriteClipArray[6].w = 51;
         playerSpriteClipArray[6].h = 20;
         playerSpriteClips.push_back(&playerSpriteClipArray[6]);
 
-        //Set top left sprite
         playerSpriteClipArray[7].x = 51;
         playerSpriteClipArray[7].y = 60;
         playerSpriteClipArray[7].w = 51;
@@ -491,6 +493,7 @@ bool loadMedia()
         success = false;
     }
     else {
+        // set laser clipping rectangles
         laserSpriteClipArray[0].x =  0;
         laserSpriteClipArray[0].y =  0;
         laserSpriteClipArray[0].w = 25;
@@ -499,13 +502,14 @@ bool loadMedia()
     }
 
 
-	// Load second test object
+	// Load enemy texture
     if( !gSpriteSheetTextures[3].loadFromFile( "./assets/alienshipv2.png"))
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
     else {
+        // set enemy cliiping rectangles
         enemySpriteClipArray[0].x = 0;
         enemySpriteClipArray[0].y = 0;
         enemySpriteClipArray[0].w = 32;
@@ -545,19 +549,22 @@ bool loadMedia()
     }
 
 
+    // load star texture
     if( !gSpriteSheetTextures[2].loadFromFile( "./assets/star.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
 
-	if( !gSpriteSheetTextures[4].loadFromFile( "./assets/bartop.png" ) )
+	// load UI bar texture
+    if( !gSpriteSheetTextures[4].loadFromFile( "./assets/bartop.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
     }
 
-	if( !gSpriteSheetTextures[5].loadFromFile( "./assets/barbottom.png" ) )
+	// load UI bar texture
+    if( !gSpriteSheetTextures[5].loadFromFile( "./assets/barbottom.png" ) )
     {
         printf( "Failed to load sprite sheet texture!\n" );
         success = false;
