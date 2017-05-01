@@ -17,7 +17,7 @@ player::player (float x, float y, int width, int height, texture* text) : sprite
     setPos(x,y);
     maxVel = 25;
     drag = 0.95;
-    acc = 1.2;
+    acc = 0.75;
 }
 
 void player::update() {
