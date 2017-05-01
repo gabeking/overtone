@@ -9,6 +9,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <stdio.h>
 #include <string>
+#include <iostream>
+using namespace std;
 
 // Global renderer
 extern SDL_Renderer* gRenderer;

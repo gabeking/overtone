@@ -17,12 +17,15 @@ class enemy : public sprite { // inherits from sprite class
         void updateAcc(float, float);
         void updateVel();
 		int  enemy_dies(int);
+		const static double* sine_lookup;
     private:
         float xAcc;
         float yAcc;
         float maxVel;
         float maxAcc;
         float drag;
+		int sine_counter;
+		double origin;
 };
 
 #endif

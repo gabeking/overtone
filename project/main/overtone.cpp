@@ -71,6 +71,7 @@ TTF_Font *gFont = NULL;
 texture gTextTexture;
 texture gTextTextureLives;
 texture gTextTextureMultiplier;
+texture gTextTexturePowerUp;
 
 Mix_Music *gMusic = NULL;
 
@@ -182,7 +183,7 @@ int main( int argc, char* argv[] )
 			enemy_timer.start();
 	        
             // time between laser shots (in ms)
-            unsigned int laser_coolDown = 250;
+            unsigned int laser_coolDown = 50;
 
 			double songLength = song_notes.back().getOnset();
 			
@@ -194,7 +195,11 @@ int main( int argc, char* argv[] )
             // Animation counter = number of frames per change in sprite
             int animCounterMax = 5;
             int animCounter = 0;
-            
+
+			// Color Change Counter
+			int colorCounterMax = 10;
+			int colorCounter = 0;            
+
             //While application is running
             while( !quit )
             {
@@ -235,10 +240,21 @@ int main( int argc, char* argv[] )
                 if (keyStates[SDL_SCANCODE_SPACE]) {
                     if (laser_timer.getTicks() > laser_coolDown) {
                         laser_timer.start();
-                        laser new_laser(laserSpeed, Player.getYVel(), SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
-                        new_laser.setClips(laserSpriteClips);
-                        new_laser.setPos(Player.getX() + Player.getWidth() - new_laser.getWidth()/2, Player.getMidY() - new_laser.getHeight()/2);
-                        laser_list.push_back(new_laser);
+                        laser new_laser1(laserSpeed, Player.getYVel(), SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
+                        new_laser1.setClips(laserSpriteClips);
+                        new_laser1.setPos(Player.getX() + Player.getWidth() - new_laser1.getWidth()/2, Player.getMidY() - new_laser1.getHeight()/2);
+                        laser_list.push_back(new_laser1);
+						if (STREAK >= 50){
+							gTextTexturePowerUp.loadFromRenderedText(gFont, "Power Up: TriLaser", textColor );
+							laser new_laser2(laserSpeed, Player.getYVel()-1, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
+		                    new_laser2.setClips(laserSpriteClips);
+		                    new_laser2.setPos(Player.getX() + Player.getWidth() - new_laser2.getWidth()/2, Player.getMidY() - new_laser2.getHeight()/2);
+		                    laser_list.push_back(new_laser2);
+							laser new_laser3(laserSpeed, Player.getYVel()+1, SCREEN_WIDTH, SCREEN_HEIGHT, &gSpriteSheetTextures[1]);
+		                    new_laser3.setClips(laserSpriteClips);
+		                    new_laser3.setPos(Player.getX() + Player.getWidth() - new_laser3.getWidth()/2, Player.getMidY() - new_laser3.getHeight()/2);
+		                    laser_list.push_back(new_laser3);
+						}
                     }
                 }
                 
@@ -290,6 +306,21 @@ int main( int argc, char* argv[] )
 						}			
 					}
 				}
+
+				colorCounter++;
+				if (song_notes.size() > 0){
+					if (colorCounter >= colorCounterMax){
+						colorCounter=0;
+						int color_freq = song_notes[0].getFreq();
+						double red_rand = (double)(rand() % 100) / 50;
+						double green_rand = (double)(rand() % 100) / 50;
+						double blue_rand = (double)(rand() % 100) / 50;
+						int red = 255*(red_rand*(double)color_freq/500);
+						int green = 255-(255*((double)color_freq/1000)*green_rand);
+						int blue = 255-(255*((double)color_freq/500))*blue_rand;
+						gSpriteSheetTextures[3].setColor(red, green, blue);
+					}
+				}
 				if (enemy_timer.getTicks() > (songLength+5)*1000){
 					break;
 				}
@@ -309,6 +340,7 @@ int main( int argc, char* argv[] )
 						STREAK = 0;
 						MULTIPLIER = 1;
 						string multiplies = "Multiplier: " + to_string(MULTIPLIER);
+						gTextTexturePowerUp.loadFromRenderedText(gFont, "Power Up: None", textColor );
 						gTextTextureMultiplier.loadFromRenderedText(gFont, multiplies, textColor );
                         iterator = enemy_list.erase(iterator);
                     }
@@ -326,6 +358,7 @@ int main( int argc, char* argv[] )
 				gTextTexture.render( 10, 3);				
 				gTextTextureLives.render(575, 3);
 				gTextTextureMultiplier.render(10, 460);
+				gTextTexturePowerUp.render(500,460);
                 
                 if (animCounter >= animCounterMax) {
                     animCounter = 0; 
@@ -552,6 +585,10 @@ bool loadMedia()
 			printf( "Failed to render text texture!\n" ); 
 			success = false; 
 		} 
+		if( !gTextTexturePowerUp.loadFromRenderedText(gFont, "Power Up: None", textColor ) ) { 
+			printf( "Failed to render text texture!\n" ); 
+			success = false; 
+		} 
 	}
 	
 	//Load music 
@@ -611,16 +648,16 @@ vector<note> set_up_music_adt(){
 	//based on the difficulty
 	switch (DIFFICULTY) {
 		case 1:
-			second = 1;
-			second_increment = 1;
-			break;
-		case 2:
-			second = 0.5;
-			second_increment =0.5;
-			break;
-		case 3:
 			second = 0.25;
 			second_increment = 0.25;
+			break;
+		case 2:
+			second = 0.125;
+			second_increment =0.125;
+			break;
+		case 3:
+			second = 0.03125;
+			second_increment = 0.03125;
 			break;
 		default:
 			second = 3;
