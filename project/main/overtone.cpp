@@ -182,6 +182,11 @@ int main( int argc, char* argv[] )
             // start enemy timer
 			enemy_timer.start();
 	        
+            // timer for player invulnerability after being hit
+            SDLTimer player_timer;
+            player_timer.start();
+            unsigned int player_coolDown = 1000;
+
             // time between laser shots (in ms)
             unsigned int laser_coolDown = 60;
 
@@ -203,6 +208,7 @@ int main( int argc, char* argv[] )
             //While application is running
             while( !quit )
             {
+                
                 // start cap timer
                 capTimer.start();
 		
@@ -231,6 +237,8 @@ int main( int argc, char* argv[] )
                 }
 
                 Player.update();
+                
+                if ((player_timer.getTicks() > player_coolDown) || (player_timer.getTicks() % 150 < 80))
                 Player.render();
 
                 // Spawn lasers
@@ -338,8 +346,9 @@ int main( int argc, char* argv[] )
                     }
 					iterator->render();
                     // check collision with player
-                    if (checkColl(&Player, &(*iterator))) {
-						LIVES--;						
+                    if ((player_timer.getTicks() > player_coolDown) && checkColl(&Player, &(*iterator))) {
+						player_timer.start();
+                        LIVES--;						
 						string lives = "Lives: " + to_string(LIVES);
 						gTextTextureLives.loadFromRenderedText(gFont, lives, textColor );
 						STREAK = 0;
